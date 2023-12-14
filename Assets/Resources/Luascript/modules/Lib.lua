@@ -1,6 +1,8 @@
 Lib = {}
 
-local ListComponent = {}
+Lib.ListComponent = {}
+Lib.ListClassName = {}
+Lib.ListGameObject = {}
 
 function Lib.handler(obj, method)
     return function(...)
@@ -58,4 +60,66 @@ function Lib.Func(f,...)
     return function()
         return f(table.unpack(t))
     end
+end
+---@param InstanceIDGameObject number
+---@param obj Component
+function Lib.RegisterComponent(InstanceIDGameObject, obj)
+    if Lib.ListComponent[InstanceIDGameObject] == nil then
+        Lib.ListComponent[InstanceIDGameObject] = {}
+    end
+    print(InstanceIDGameObject, obj.__cname)
+    table.insert(Lib.ListComponent[InstanceIDGameObject], obj)
+end
+---@param InstanceIDGameObject number
+---@param obj Component
+function Lib.UnRegisterComponent(InstanceIDGameObject, obj)
+    for index, value in ipairs(Lib.ListComponent[InstanceIDGameObject]) do
+        if value == obj then
+            table.remove(Lib.ListComponent[InstanceIDGameObject], index)
+            break
+        end
+    end
+end
+---@param InstanceID number
+---@param classname string
+---@return Component
+function Lib.GetComponent(InstanceID, classname)
+    for index, value in ipairs(Lib.ListComponent[InstanceID]) do
+        if (Lib.CheckTypeClass(classname, value)) then            
+            return value
+        end
+    end
+end
+
+---@param InstanceID number
+function Lib.RemoveInstanceComponent(InstanceID)
+    Lib.ListComponent[InstanceID] = nil
+end
+
+---@return boolean
+function Lib.CheckTypeClass(classname, obj)    
+    if obj.__cname == classname then
+        return true
+    elseif obj.super ~= nil then
+        return Lib.CheckTypeClass(classname, obj.super)
+    else
+        return false
+    end
+end
+
+function Lib.AddClass(classname, cls)    
+    Lib.ListClassName[classname] = cls
+end
+
+function Lib.GetClass(classname)        
+    return Lib.ListClassName[classname]
+end
+
+function Lib.GetOrAddGameObject(InstanceIDGameObject)
+    if not Lib.ListGameObject[InstanceIDGameObject] then
+        local gameObject = GameObject.new(InstanceIDGameObject)
+        Lib.ListGameObject[InstanceIDGameObject] = gameObject
+    end
+
+    return Lib.ListGameObject[InstanceIDGameObject]
 end

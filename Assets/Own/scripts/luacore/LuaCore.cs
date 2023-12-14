@@ -4,10 +4,18 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class LuaObject
+{
+    public GameObject gameObject;
+    public Dictionary<int, UnityEngine.Component> components = new();
+}
 
 public class LuaCore : MonoBehaviour
 {
@@ -19,14 +27,21 @@ public class LuaCore : MonoBehaviour
     private Table Timer;
     private Dictionary<int, Dictionary<string, List<DynValue>>> luaEventData = new();
     
+    
+    
+    private Dictionary<int, LuaObject> luaObject = new();
+    
 
     private List<string> modulesfile = new List<string>()
     {
         "modules/require",
         "modules/update",
+        "modules/Lib",
         "modules/class",
+        "modules/GameObject",
         "modules/Component",
         "modules/MonoBehaviour",
+        "lua/RegisterClass"
     };
 
 #if UNITY_EDITOR
@@ -36,7 +51,7 @@ public class LuaCore : MonoBehaviour
 #endif
 
     public void Awake()
-    {        
+    {                
         Instance = this;
         // Khởi tạo đối tượng Script
         luaScript = new Script();
@@ -72,6 +87,9 @@ public class LuaCore : MonoBehaviour
         {            
             Debug.LogError("An error occurred: " + ex.Message);
         }
+
+        DontDestroyOnLoad(gameObject);
+        SceneManager.LoadScene(1);
     }
 
     
@@ -79,9 +97,9 @@ public class LuaCore : MonoBehaviour
     {
         try
         {
-            luaScript.DoString($"Time.deltaTime = {Time.deltaTime};Time:tick()");
-            //Timer["deltaTime"] = Time.deltaTime;
-            //Timer.Get("tick").Function.Call();
+            //luaScript.DoString($"Time.deltaTime = {Time.deltaTime};Time:tick()");
+            Timer["deltaTime"] = Time.deltaTime;
+            Timer.Get("tick").Function.Call();
         }
         catch (ScriptRuntimeException ex)
         {
@@ -93,7 +111,9 @@ public class LuaCore : MonoBehaviour
     {
         try
         {
-            luaScript.DoString($"Time.fixedDeltaTime = {Time.fixedDeltaTime};Time:fixedTick()");            
+            //luaScript.DoString($"Time.fixedDeltaTime = {Time.fixedDeltaTime};Time:fixedTick()");
+            Timer["fixedDeltaTime"] = Time.fixedDeltaTime;
+            Timer.Get("fixedTick").Function.Call();
         }
         catch(ScriptRuntimeException ex)
         {
@@ -114,6 +134,9 @@ public class LuaCore : MonoBehaviour
     private void SetUnityTable()
     {
         UnityTable["require"] =(Func<string, DynValue>)Require;
+        UnityTable["DestroyObject"] =(Action<int>)DestroyLuaObject;
+        UnityTable["DestroyComponent"] =(Action<int, int>)DestroyLuaComponent;
+        UnityTable["SetEnableComponent"] =(Action<int, int, bool>)SetLuaComponentEnable;
     }
 
     private void SetUnityTableEvent()
@@ -122,7 +145,7 @@ public class LuaCore : MonoBehaviour
         UnityTableEvent["UnRegiterEvent"] = (Action<int, string, DynValue>)UnityEvent_UnRegiterEvent;
         UnityTableEvent["RemoveInstanceID"] = (Action<int>)UnityEvent_RemoveInstanceID;
     }
-
+    #region UnityTableEvent
     public void UnityEvent_RegiterEvent(int InstanceID, string eventName, DynValue func)
     {
         if(func.Type == DataType.Function)
@@ -186,8 +209,9 @@ public class LuaCore : MonoBehaviour
     {
         luaEventData.Remove(InstanceID);
     }
+    #endregion
 
-
+    #region JsonModule
     private string JsonEncode(Table table)
     {
         return JsonTableConverter.TableToJson(table);
@@ -197,6 +221,75 @@ public class LuaCore : MonoBehaviour
     {
         return JsonTableConverter.JsonToTable(json);
     }
+    #endregion
+
+    #region LuaObject
+    public void AddLuaObject(int InstanceID, UnityEngine.Component component)
+    {
+        int GameObjectInstanceID = component.gameObject.GetInstanceID();
+        if (!this.luaObject.ContainsKey(GameObjectInstanceID))
+        {
+            this.luaObject.Add(GameObjectInstanceID, new LuaObject()
+            {
+                gameObject = component.gameObject
+            });
+        }
+
+        LuaObject luaObject = this.luaObject[GameObjectInstanceID];
+        if (!luaObject.components.ContainsKey(InstanceID))
+        {
+            luaObject.components.Add(InstanceID, component);
+        }
+
+    }
+
+    public GameObject GetLuaObject(int InstanceIDGameObject)
+    {
+        if (luaObject.ContainsKey(InstanceIDGameObject))
+        {
+            return luaObject[InstanceIDGameObject].gameObject;
+        }
+        return null;
+    }
+
+    public UnityEngine.Component GetLuaComponent(int InstanceIDGameObject, int InstanceIDComponent)
+    {
+        if (luaObject.ContainsKey(InstanceIDGameObject))
+        {
+            if (luaObject[InstanceIDGameObject].components.ContainsKey(InstanceIDComponent))
+            {
+                return luaObject[InstanceIDGameObject].components[InstanceIDComponent];
+            }
+        }
+        return null;
+    }
+
+    public void DestroyLuaObject(int InstanceIDGameObject)
+    {
+        Destroy(luaObject[InstanceIDGameObject].gameObject);
+        luaObject.Remove(InstanceIDGameObject);
+    }
+
+    public void DestroyLuaComponent(int InstanceIDGameObject, int InstanceIDComponent)
+    {
+        UnityEngine.Component component = GetLuaComponent(InstanceIDGameObject, InstanceIDComponent);
+        if (component != null)
+        {
+            Destroy(component);
+            luaObject[InstanceIDGameObject].components.Remove(InstanceIDComponent);
+        }
+    }
+
+    public void SetLuaComponentEnable(int InstanceIDGameObject, int InstanceIDComponent, bool enable)
+    {
+        UnityEngine.Component component = GetLuaComponent(InstanceIDGameObject, InstanceIDComponent);
+        if (component != null && component.GetType() == typeof(MonoBehaviour))
+        {            
+            MonoBehaviour monoBehaviour = (MonoBehaviour)component;
+            monoBehaviour.enabled = enable;
+        }
+    }
+    #endregion
 
     public DynValue Require(string path)
     {

@@ -1,29 +1,20 @@
----@class GameObject : Component
-GameObject = class("GameObject", Component)
+---@class GameObject
+GameObject = class("GameObject")
 
-function GameObject:ctor()
-    
+function GameObject:ctor(InstanceID)        
+    self.prototype = {
+        _enable = true,
+        _instanceID = InstanceID
+    }
 end
----@param component string
----@param object Component
-function GameObject:AddComponent(component, object)
-    if type(object) ~= "table" then
-        return
-    end
-    
-    if Component.listComponent[self:GetInstanceID()] == nil then
-        Component.listComponent[self:GetInstanceID()] = {}
-    end
-    if Component.listComponent[self:GetInstanceID()][component] == nil then
-        Component.listComponent[self:GetInstanceID()][component] = {}
-    end
 
-    table.insert(Component.listComponent[self:GetInstanceID()][component], object)
-    if type(object.Awake) == "function" then
-        object:Awake()
+function GameObject:AddComponent(classname)
+    local cls = Lib.GetClass(classname)
+    if cls ~= nil then
+        local component = cls.new()
     end
+end
 
-    if type(object.OnEnable) == "function" and object:GetEnable() then
-        object:OnEnable()
-    end
+function GameObject:GetInstanceID()
+    return self.prototype._instanceID
 end

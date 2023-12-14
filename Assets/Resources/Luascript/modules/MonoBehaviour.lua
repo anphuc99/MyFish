@@ -7,35 +7,34 @@
 ---@field Update function
 MonoBehaviour = class("MonoBehaviour", Component)
 
-function MonoBehaviour:ctor(InstanceID)
-    self.super:ctor(InstanceID)
+function MonoBehaviour:OnInit()        
     if type(self.Awake) == "function" then
-        UnityEvent.RegiterEvent(InstanceID, "Awake", self.Awake)        
+        UnityEvent.RegiterEvent(self:GetInstanceID(), "Awake", self.Awake)        
     end
 
     if type(self.Start) == "function" then
-        UnityEvent.RegiterEvent(InstanceID, "Start", self.Start)
+        UnityEvent.RegiterEvent(self:GetInstanceID(), "Start", self.Start)
     end
 
     if type(self.OnEnable) == "function" then
-        UnityEvent.RegiterEvent(InstanceID, "OnEnable", self.OnEnable)
+        UnityEvent.RegiterEvent(self:GetInstanceID(), "OnEnable", self.OnEnable)
     end
 
     if type(self.OnDisable) == "function" then
-        UnityEvent.RegiterEvent(InstanceID, "OnDisable", self.OnDisable)
+        UnityEvent.RegiterEvent(self:GetInstanceID(), "OnDisable", self.OnDisable)
     end    
 
     if type(self.OnDestroy) == "function" then
-        UnityEvent.RegiterEvent(InstanceID, "OnDestroy", self.OnDestroy)
+        UnityEvent.RegiterEvent(self:GetInstanceID(), "OnDestroy", self.OnDestroy)
     end    
 
-    if type(self.Update) == "function" then        
-        UnityEvent.RegiterEvent(InstanceID, "OnEnable", self.EnableUpdate)
-        UnityEvent.RegiterEvent(InstanceID, "OnDisable", self.DisableUpdate)
+    if type(self.Update) == "function" then            
+        UnityEvent.RegiterEvent(self:GetInstanceID(), "OnEnable", self.EnableUpdate)
+        UnityEvent.RegiterEvent(self:GetInstanceID(), "OnDisable", self.DisableUpdate)
     end
 end
 
-function MonoBehaviour:EnableUpdate()    
+function MonoBehaviour:EnableUpdate()        
     Time:update(self.Update, self)
 end
 

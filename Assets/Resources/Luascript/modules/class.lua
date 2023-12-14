@@ -58,7 +58,7 @@ function class(classname, super)
     else
         -- inherited from Lua Object
         if super then
-            cls = {}
+            cls = setmetatable({}, super)
             setmetatable(cls, {__index = super})
             cls.super = super
         else
@@ -78,7 +78,7 @@ function class(classname, super)
         end
     end
 
-
+    Lib.AddClass(cls.__cname, cls)
     return cls
 end
 

@@ -1,16 +1,19 @@
 
----@class HelloClass : MonoBehaviour
+---@class HelloClass: MonoBehaviour
 ---@field id number
 ---@field gameObject string
 ---@field aaa Hi
 local HelloClass = class("HelloClass", MonoBehaviour)
 
 function HelloClass:Awake()
-    print(self.aaa.kkk)
+
 end
 
 function HelloClass:Start()
     print("HelloClass Start")
+    self.aaa = self:GetComponent("Hi")
+    print(self.aaa.kkk)
+    self:Destroy(self.aaa)
 end
 
 function HelloClass:Update()

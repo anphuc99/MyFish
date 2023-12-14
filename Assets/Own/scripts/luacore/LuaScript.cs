@@ -43,7 +43,9 @@ public class LuaScript : MonoBehaviour
 {
     [FilePath(ParentFolder  = "Assets/Resources/Luascript")]
     [ValidateInput("CheckFileExistence", "File does not exist.", InfoMessageType.Error)]
-    public string filePathLua;      
+    public string filePathLua;
+    [ReadOnly]
+    public string classLua;
     public List<LuaSerializable> @params;
     public DynValue luaObject
     {
@@ -65,7 +67,6 @@ public class LuaScript : MonoBehaviour
         {
             SetLuaObject();
         }
-
         LuaCore.Instance.UnityEvent_Emit(_luaObject, GetInstanceID(), "Awake");
     }
 
@@ -92,17 +93,27 @@ public class LuaScript : MonoBehaviour
 
     private void SetLuaObject()
     {
-        LuaCore.luaScript.Globals["___param"] = ConvertLuaParamToLua();
-        string luaCode = @$"
-        local obj = require(""{ConvertPathToLuaRequire()}"").new({GetInstanceID()});
-
-        for key, value in pairs(___param) do
-            obj[key] = value
-        end               
-        return obj
-";
         //LuaCore.luaScript.Globals.Remove("___param");
-        _luaObject = LuaCore.luaScript.DoString(luaCode);
+        try
+        {
+            LuaCore.luaScript.Globals["___param"] = ConvertLuaParamToLua();
+            string luaCode = @$"            
+            local obj = Lib.GetClass(""{classLua}"").new({GetInstanceID()},{gameObject.GetInstanceID()});
+
+            for key, value in pairs(___param) do
+                obj[key] = value
+            end               
+            obj:Init({gameObject.GetInstanceID()})
+            return obj";
+            _luaObject = LuaCore.luaScript.DoString(luaCode);
+            LuaCore.Instance.AddLuaObject(GetInstanceID(), this);        
+            LuaCore.Instance.AddLuaObject(transform.GetInstanceID(), transform);
+
+        }
+        catch(ScriptRuntimeException ex)
+        {
+            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage);
+        }
     }
 
     private Table ConvertLuaParamToLua()
@@ -119,7 +130,10 @@ public class LuaScript : MonoBehaviour
                     table[param.param] = param.number;
                     break;
                 case LuaType.LuaComponent:
-                    table[param.param] = param.luaComponent.luaObject;
+                    if (param.luaComponent != null)
+                    {
+                        table[param.param] = param.luaComponent.luaObject;
+                    }
                     break;
             }
         }
@@ -147,6 +161,7 @@ public class LuaScript : MonoBehaviour
         {
             string data = File.ReadAllText(LuaCore.assetFile + filePathLua);
             List<LuaTypeCode> attrLua = ParseLuaClass(data);
+            classLua = GetClassNames(data);
             Dictionary<string, LuaType> luaType = new Dictionary<string, LuaType>()
             {
                 {"number", LuaType.Number},
@@ -232,7 +247,19 @@ public class LuaScript : MonoBehaviour
             });
         }
 
+        
+
         return luaAttributes;
+    }
+
+    static string GetClassNames(string luaCode)
+    {
+        var classLua = Regex.Matches(luaCode, @"---@class\s+(\w+)(?=\s*(:|\n))");
+        foreach (Match match in classLua)
+        {
+            return match.Groups[1].Value;
+        }
+        return "";
     }
 #endif
 }
