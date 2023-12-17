@@ -4,6 +4,9 @@ Unity = {}
 function Unity.DestroyObject(InstanceID)end
 function Unity.DestroyComponent(InstanceIDGameObject, InstanceIDComponent)end
 function Unity.SetEnableComponent(InstanceIDGameObject, InstanceIDComponent, enable)end
+function Unity.SetObjectActive(InstanceIDGameObject, active)end
+---@return Component
+function Unity.AddComponent(InstanceIDGameObject, className)end
 
 
 ---@class UnityEvent

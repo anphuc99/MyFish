@@ -1,6 +1,5 @@
 -- Create an class.
-
-local function clone(object)--clone函数
+function clone(object)--clone函数
     local lookup_table = {}--新建table用于记录
     local function _copy(object)--_copy(object)函数用于实现复制
         if type(object) ~= "table" then
@@ -58,9 +57,8 @@ function class(classname, super)
     else
         -- inherited from Lua Object
         if super then
-            cls = setmetatable({}, super)
-            setmetatable(cls, {__index = super})
-            cls.super = super
+            cls = clone(super)
+            -- cls.super = super
         else
             cls = {ctor = function() end}
         end
@@ -70,14 +68,19 @@ function class(classname, super)
         cls.__ctype = 2 -- lua
         cls.__index = cls
 
-        function cls.new(...)
-            local instance = setmetatable({}, cls)
+        function cls.new(...)                  
+            local instance = setmetatable({}, {__index = cls})
             --instance.class = cls
             instance:ctor(...)
             return instance
         end
     end
-
+    if super then
+        local base = {}
+        setmetatable(base, {__index = super})
+        Lib.AddClass(cls.__cname, cls)
+        return cls, base
+    end
     Lib.AddClass(cls.__cname, cls)
     return cls
 end
@@ -90,5 +93,6 @@ function classof(obj)
     end
     return typename
 end
+
 
 return class, classof, clone

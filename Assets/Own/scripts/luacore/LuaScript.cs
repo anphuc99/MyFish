@@ -46,7 +46,10 @@ public class LuaScript : MonoBehaviour
     public string filePathLua;
     [ReadOnly]
     public string classLua;
-    public List<LuaSerializable> @params;
+    public List<LuaSerializable> @params = new List<LuaSerializable>();
+
+    [HideInInspector]
+    public bool isInitialized = false;
     public DynValue luaObject
     {
         get
@@ -61,8 +64,10 @@ public class LuaScript : MonoBehaviour
     }
 
     private DynValue _luaObject;
-    private void Awake()
+    public void Awake()
     {
+        if (!isInitialized)return;
+        
         if (_luaObject == null)
         {
             SetLuaObject();
@@ -96,16 +101,22 @@ public class LuaScript : MonoBehaviour
         //LuaCore.luaScript.Globals.Remove("___param");
         try
         {
-            LuaCore.luaScript.Globals["___param"] = ConvertLuaParamToLua();
-            string luaCode = @$"            
-            local obj = Lib.GetClass(""{classLua}"").new({GetInstanceID()},{gameObject.GetInstanceID()});
+            Table paramLua = ConvertLuaParamToLua();
+            //if (paramLua != null)
+            //{
+            //    LuaCore.SetGlobal("___param", ConvertLuaParamToLua());
+            //}
+            //string luaCode = @$"            
+            //local obj = Lib.GetClass(""{classLua}"").new({GetInstanceID()},{gameObject.GetInstanceID()});
+            //if ___param then
+            //    for key, value in pairs(___param) do
+            //        obj[key] = value
+            //    end               
+            //end
 
-            for key, value in pairs(___param) do
-                obj[key] = value
-            end               
-            obj:Init({gameObject.GetInstanceID()})
-            return obj";
-            _luaObject = LuaCore.luaScript.DoString(luaCode);
+            //return obj";
+            var Lib = LuaCore.GetGlobal("Lib");
+            _luaObject =Lib.Table.Get("SetObject").Function.Call(classLua, GetInstanceID(), gameObject.GetInstanceID(), paramLua);            
             LuaCore.Instance.AddLuaObject(GetInstanceID(), this);        
             LuaCore.Instance.AddLuaObject(transform.GetInstanceID(), transform);
 
@@ -118,26 +129,30 @@ public class LuaScript : MonoBehaviour
 
     private Table ConvertLuaParamToLua()
     {
-        Table table = new Table(LuaCore.luaScript);
-        foreach(var param in @params)
+        if (@params.Count < 0)
         {
-            switch (param.type)
+            Table table = LuaCore.CreateTable();
+            foreach(var param in @params)
             {
-                case LuaType.String:
-                    table[param.param] = param.@string;
-                    break;
-                case LuaType.Number:
-                    table[param.param] = param.number;
-                    break;
-                case LuaType.LuaComponent:
-                    if (param.luaComponent != null)
-                    {
-                        table[param.param] = param.luaComponent.luaObject;
-                    }
-                    break;
+                switch (param.type)
+                {
+                    case LuaType.String:
+                        table[param.param] = param.@string;
+                        break;
+                    case LuaType.Number:
+                        table[param.param] = param.number;
+                        break;
+                    case LuaType.LuaComponent:
+                        if (param.luaComponent != null)
+                        {
+                            table[param.param] = param.luaComponent.luaObject;
+                        }
+                        break;
+                }
             }
+            return table;
         }
-        return table;
+        return null;
     }
 
     private string ConvertPathToLuaRequire()
@@ -157,6 +172,7 @@ public class LuaScript : MonoBehaviour
     [OnInspectorGUI]
     private void OnChangFileLua()
     {
+        isInitialized = true;
         if (File.Exists(LuaCore.assetFile + filePathLua))
         {
             string data = File.ReadAllText(LuaCore.assetFile + filePathLua);

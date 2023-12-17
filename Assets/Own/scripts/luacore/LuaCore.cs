@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,7 +21,7 @@ public class LuaObject
 public class LuaCore : MonoBehaviour
 {
     public static LuaCore Instance;
-    public static Script luaScript;
+    private static Script luaScript;
     private Table UnityTable;
     private Table UnityTableEvent;
 
@@ -55,11 +56,11 @@ public class LuaCore : MonoBehaviour
         Instance = this;
         // Khởi tạo đối tượng Script
         luaScript = new Script();
-        UnityTable = new Table(luaScript);
+        UnityTable = new Table(luaScript);        
         UnityTableEvent = new Table(luaScript);
         // Thực thi mã Lua từ một xâu ký tự
         luaScript.Globals["print"] = (Action<object[]>)Print;
-        luaScript.Globals["error"] = (Action<string>)Error;
+        luaScript.Globals["error"] = (Action<string>)Error;        
         SetUnityTable();
         SetUnityTableEvent();
         luaScript.Globals["Unity"] = UnityTable;
@@ -74,7 +75,7 @@ public class LuaCore : MonoBehaviour
             // set modules
             foreach (var module in modulesfile)
             {            
-                luaScript.DoString(LoadAsset(module), null, module.Replace('/','.'));
+                DoString(LoadAsset(module), null, module.Replace('/','.'));
             }
 
             Timer = luaScript.Globals.Get("Time").Table;
@@ -121,6 +122,20 @@ public class LuaCore : MonoBehaviour
         }
     }
 
+    public static DynValue DoString(string code, Table globalContext = null, string codeFriendlyName = null)
+    {
+        return luaScript.DoString(code, globalContext, codeFriendlyName);
+    }
+
+    public static DynValue GetGlobal(string key)
+    {
+        return luaScript.Globals.Get(key);
+    }
+
+    public static Table CreateTable()
+    {
+        return new Table(luaScript);
+    }
     private void SetModulesJsonParser()
     {
         Table json = new Table(luaScript);
@@ -137,13 +152,15 @@ public class LuaCore : MonoBehaviour
         UnityTable["DestroyObject"] =(Action<int>)DestroyLuaObject;
         UnityTable["DestroyComponent"] =(Action<int, int>)DestroyLuaComponent;
         UnityTable["SetEnableComponent"] =(Action<int, int, bool>)SetLuaComponentEnable;
+        UnityTable["SetObjectActive"] =(Action<int, bool>)SetLuaObjectActive;
+        UnityTable["AddComponent"] = (Func<int, string, DynValue>)AddLuaComponent;
     }
 
     private void SetUnityTableEvent()
     {
         UnityTableEvent["RegiterEvent"] = (Action<int, string, DynValue>)UnityEvent_RegiterEvent;
         UnityTableEvent["UnRegiterEvent"] = (Action<int, string, DynValue>)UnityEvent_UnRegiterEvent;
-        UnityTableEvent["RemoveInstanceID"] = (Action<int>)UnityEvent_RemoveInstanceID;
+        UnityTableEvent["RemoveInstanceID"] = (Action<int>)UnityEvent_RemoveInstanceID;        
     }
     #region UnityTableEvent
     public void UnityEvent_RegiterEvent(int InstanceID, string eventName, DynValue func)
@@ -266,8 +283,11 @@ public class LuaCore : MonoBehaviour
 
     public void DestroyLuaObject(int InstanceIDGameObject)
     {
-        Destroy(luaObject[InstanceIDGameObject].gameObject);
-        luaObject.Remove(InstanceIDGameObject);
+        if (luaObject.ContainsKey(InstanceIDGameObject))
+        {
+            Destroy(luaObject[InstanceIDGameObject].gameObject);
+            luaObject.Remove(InstanceIDGameObject);
+        }
     }
 
     public void DestroyLuaComponent(int InstanceIDGameObject, int InstanceIDComponent)
@@ -288,6 +308,28 @@ public class LuaCore : MonoBehaviour
             MonoBehaviour monoBehaviour = (MonoBehaviour)component;
             monoBehaviour.enabled = enable;
         }
+    }
+
+    public void SetLuaObjectActive(int InstanceIDGameObject, bool active)
+    {
+        if (luaObject.ContainsKey(InstanceIDGameObject)) 
+        {
+            luaObject[InstanceIDGameObject].gameObject.SetActive(active);
+        }
+    }
+
+    public DynValue AddLuaComponent(int InstanceIDGameObject, string nameClassLua)
+    {
+        if (luaObject.ContainsKey(InstanceIDGameObject))
+        {
+            LuaScript luaScript = luaObject[InstanceIDGameObject].gameObject.AddComponent<LuaScript>();
+            luaScript.classLua = nameClassLua;
+            luaScript.isInitialized = true;
+            luaScript.Awake();
+            return luaScript.luaObject;
+        }
+
+        return null;
     }
     #endregion
 

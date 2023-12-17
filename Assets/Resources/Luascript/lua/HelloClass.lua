@@ -11,9 +11,6 @@ end
 
 function HelloClass:Start()
     print("HelloClass Start")
-    self.aaa = self:GetComponent("Hi")
-    print(self.aaa.kkk)
-    self:Destroy(self.aaa)
 end
 
 function HelloClass:Update()

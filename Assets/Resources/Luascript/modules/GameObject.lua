@@ -7,12 +7,13 @@ function GameObject:ctor(InstanceID)
         _instanceID = InstanceID
     }
 end
-
+---@return Component
 function GameObject:AddComponent(classname)
-    local cls = Lib.GetClass(classname)
-    if cls ~= nil then
-        local component = cls.new()
-    end
+    return Unity.AddComponent(self:GetInstanceID(), classname)
+end
+
+function GameObject:SetActive(active)
+    Unity.SetObjectActive(self:GetInstanceID(), active)
 end
 
 function GameObject:GetInstanceID()

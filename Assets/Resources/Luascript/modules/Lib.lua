@@ -123,3 +123,14 @@ function Lib.GetOrAddGameObject(InstanceIDGameObject)
 
     return Lib.ListGameObject[InstanceIDGameObject]
 end
+
+function Lib.SetObject(classname, InstanceID, InstanceIDGameObject ,initparam)
+    local obj = Lib.GetClass(classname).new(InstanceID,InstanceIDGameObject);
+    if initparam then
+        for key, value in pairs(initparam) do
+            obj[key] = value
+        end               
+    end
+    obj:Init(InstanceIDGameObject);
+    return obj
+end

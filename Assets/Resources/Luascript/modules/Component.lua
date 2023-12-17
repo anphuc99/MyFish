@@ -18,7 +18,7 @@ function Component:Init(InstanceIDgameObject)
     self:OnInit()
 end
 
-function Component:OnInit()    
+function Component:OnInit()        
 end
 
 function Component:GetComponent(classname)
