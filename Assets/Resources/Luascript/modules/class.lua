@@ -57,8 +57,8 @@ function class(classname, super)
     else
         -- inherited from Lua Object
         if super then
-            cls = clone(super)
-            -- cls.super = super
+            cls = clone(super)            
+            cls.super = setmetatable({},{__index = super})
         else
             cls = {ctor = function() end}
         end
@@ -75,14 +75,14 @@ function class(classname, super)
             return instance
         end
     end
-    if super then
-        local base = {}
-        setmetatable(base, {__index = super})
-        Lib.AddClass(cls.__cname, cls)
-        return cls, base
-    end
+    -- if super then
+    --     local base = {}
+    --     setmetatable(base, {__index = super})
+    --     Lib.AddClass(cls.__cname, cls)
+    --     return cls, base
+    -- end
     Lib.AddClass(cls.__cname, cls)
-    return cls
+    return cls,cls.super
 end
 
 function classof(obj)

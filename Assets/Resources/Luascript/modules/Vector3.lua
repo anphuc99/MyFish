@@ -22,6 +22,15 @@ local rawget = rawget
 local rad2Deg = math.rad2Deg
 local deg2Rad = math.deg2Rad
 
+---@class Vector3
+---@field up Vector3
+---@field down Vector3
+---@field right Vector3
+---@field left Vector3
+---@field forward Vector3
+---@field back Vector3
+---@field zero Vector3
+---@field one Vector3
 Vector3 = 
 {	
 	__cname = "Vector3",
@@ -497,6 +506,10 @@ function Vector3:MulQuat(quat)
 	
 	self:Set(x, y, z)	
 	return self
+end
+
+function Vector3:toTable()
+	return {x = self.x, y = self.y, z = self.z}
 end
 
 function Vector3.AngleAroundAxis (from, to, axis)	 	 

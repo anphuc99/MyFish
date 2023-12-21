@@ -11,11 +11,24 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.PlayerSettings;
 
 public class LuaObject
 {
     public GameObject gameObject;
     public Dictionary<int, UnityEngine.Component> components = new();
+}
+
+public struct LuaTransformMove
+{
+    public Transform transform;
+    public Vector3 posMove;
+}
+
+public struct LuaTransformRot
+{
+    public Transform transform;
+    public Vector3 rotMove;
 }
 
 public class LuaCore : MonoBehaviour
@@ -26,21 +39,30 @@ public class LuaCore : MonoBehaviour
     private Table UnityTableEvent;
 
     private Table Timer;
+    private List<Action> ActionUpdate = new List<Action>();
     private Dictionary<int, Dictionary<string, List<DynValue>>> luaEventData = new();
-    
-    
-    
-    private Dictionary<int, LuaObject> luaObject = new();
-    
+            
+    private Dictionary<int, LuaObject> luaObject = new(); 
+    private Dictionary<int, Transform> luaTransform = new();
 
+    private Dictionary<int,LuaTransformMove> luaTransformMove = new();
+    private Dictionary<int,LuaTransformRot> luaTransformRot = new();
+
+    private float fpsLua = 20;
+    private float _timeRunLua;
     private List<string> modulesfile = new List<string>()
     {
         "modules/require",
+        "modules/Math",
         "modules/update",
         "modules/Lib",
         "modules/class",
         "modules/GameObject",
+        "modules/Vector2",
+        "modules/Vector3",
+        "modules/Quaternion",
         "modules/Component",
+        "modules/Transform",
         "modules/MonoBehaviour",
         "lua/RegisterClass"
     };
@@ -91,6 +113,7 @@ public class LuaCore : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
         SceneManager.LoadScene(1);
+        ActionUpdate.Add(LuaTransformUpdate);
     }
 
     
@@ -98,30 +121,27 @@ public class LuaCore : MonoBehaviour
     {
         try
         {
-            //luaScript.DoString($"Time.deltaTime = {Time.deltaTime};Time:tick()");
-            Timer["deltaTime"] = Time.deltaTime;
-            Timer.Get("tick").Function.Call();
+            if (_timeRunLua <= 0)
+            {
+                Timer["deltaTime"] = Math.Max(1f/fpsLua, Time.deltaTime);
+                Timer.Get("tick").Function.Call();
+                _timeRunLua = 1f / fpsLua;
+            }
+            else
+            {
+                _timeRunLua -= Time.deltaTime;
+            }
         }
         catch (ScriptRuntimeException ex)
         {
             Debug.LogError("Lua runtime error: " + ex.DecoratedMessage);
         }
-    }
 
-    private void FixedUpdate()
-    {
-        try
+        foreach(var action in ActionUpdate)
         {
-            //luaScript.DoString($"Time.fixedDeltaTime = {Time.fixedDeltaTime};Time:fixedTick()");
-            Timer["fixedDeltaTime"] = Time.fixedDeltaTime;
-            Timer.Get("fixedTick").Function.Call();
-        }
-        catch(ScriptRuntimeException ex)
-        {
-            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage);
+            action.Invoke();
         }
     }
-
     public static DynValue DoString(string code, Table globalContext = null, string codeFriendlyName = null)
     {
         return luaScript.DoString(code, globalContext, codeFriendlyName);
@@ -154,6 +174,14 @@ public class LuaCore : MonoBehaviour
         UnityTable["SetEnableComponent"] =(Action<int, int, bool>)SetLuaComponentEnable;
         UnityTable["SetObjectActive"] =(Action<int, bool>)SetLuaObjectActive;
         UnityTable["AddComponent"] = (Func<int, string, DynValue>)AddLuaComponent;
+        UnityTable["TransformSetPosition"] = (Action<int, Table>)LuaTransformSetPosition;
+        UnityTable["TransformMove"] = (Action<int, Table>)LuaTransformMove;
+        UnityTable["TransformStopMove"] = (Action<int>)LuaTransformStopMove;
+        UnityTable["TransformGetPosition"] = (Func<int, Table>)LuaTransformGetPosition;
+        UnityTable["TransformGetRotation"] = (Func<int, Table>)GetRotation;
+        UnityTable["TransformSetRotation"] = (Action<int, Table>)SetRotation;
+        UnityTable["TransformSetSmootRote"] = (Action<int, Table>)SetSmootRote;
+        UnityTable["TransformStopSmootRote"] = (Action<int>)StopSmootRote;
     }
 
     private void SetUnityTableEvent()
@@ -285,6 +313,7 @@ public class LuaCore : MonoBehaviour
     {
         if (luaObject.ContainsKey(InstanceIDGameObject))
         {
+            luaTransform.Remove(luaObject[InstanceIDGameObject].gameObject.transform.GetInstanceID());
             Destroy(luaObject[InstanceIDGameObject].gameObject);
             luaObject.Remove(InstanceIDGameObject);
         }
@@ -330,6 +359,128 @@ public class LuaCore : MonoBehaviour
         }
 
         return null;
+    }
+    #endregion
+
+    #region LuaTransform
+    public void LuaTransformAddTransform(int InsTransform, Transform transform)
+    {
+        if (!luaTransform.ContainsKey(InsTransform))
+        {            
+            luaTransform.Add(InsTransform, transform);
+        }
+    }
+
+    public Table LuaTransformGetPosition(int InsTransform)
+    {
+        Table table = new Table(luaScript);
+        Transform transform = luaTransform[InsTransform];
+        table["x"] = transform.position.x;
+        table["y"] = transform.position.y;
+        table["z"] = transform.position.z;
+        return table;
+    }
+
+    public void LuaTransformSetPosition(int InsTransform, Table vector3)
+    {
+        if (luaTransform.ContainsKey(InsTransform))
+        {
+            Vector3 pos = new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));
+            Transform transform = luaTransform[InsTransform];
+            transform.position = pos;
+        }
+    }
+
+    public Table LuaTransformGetLocalPosition(int InsTransform)
+    {
+        Table table = new Table(luaScript);
+        Transform transform = luaTransform[InsTransform];
+        table["x"] = transform.localPosition.x;
+        table["y"] = transform.localPosition.y;
+        table["z"] = transform.localPosition.z;
+        return table;
+    }
+
+    public void LuaTransformSetLocalPosition(int InsTransform, Table vector3)
+    {
+        if (luaTransform.ContainsKey(InsTransform))
+        {
+            Vector3 pos = new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));
+            Transform transform = luaTransform[InsTransform];
+            transform.localPosition = pos;
+        }
+    }
+
+
+    public void LuaTransformMove(int InsTransform, Table vector3)
+    {
+        if(luaTransform.ContainsKey(InsTransform))
+        {
+            Vector3 pos = new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));
+            luaTransformMove.Add(InsTransform,new LuaTransformMove()
+            {
+                transform = luaTransform[InsTransform],
+                posMove = pos
+            });
+        }
+    }
+
+    public void LuaTransformStopMove(int InsTransform)
+    {
+        luaTransformMove.Remove(InsTransform);
+    }
+
+    public void SetRotation(int InsTransform, Table quaternion)
+    {
+        if (luaTransform.ContainsKey(InsTransform))
+        {
+            Quaternion rot = new Quaternion(Convert.ToSingle(quaternion.Get("x").Number), Convert.ToSingle(quaternion.Get("y").Number), Convert.ToSingle(quaternion.Get("z").Number), Convert.ToSingle(quaternion.Get("w").Number));
+            Transform transform = luaTransform[InsTransform];            
+            transform.rotation = rot;
+        }
+    }
+
+    public Table GetRotation(int InsTransform)
+    {
+        Table table = new Table(luaScript);
+        Transform transform = luaTransform[InsTransform];
+        table["x"] = transform.rotation.x;
+        table["y"] = transform.rotation.y;
+        table["z"] = transform.rotation.z;
+        table["w"] = transform.rotation.w;
+        return table;
+    }
+
+    public void SetSmootRote(int InsTransform, Table vector3)
+    {
+        if (luaTransform.ContainsKey(InsTransform))
+        {
+            Vector3 pos = new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));
+            Transform transform = luaTransform[InsTransform];
+            luaTransformRot.Add(InsTransform, new LuaTransformRot()
+            {
+                transform = luaTransform[InsTransform],
+                rotMove = pos
+            });
+        }
+    }
+
+    public void StopSmootRote(int InsTransform)
+    {
+        luaTransformRot.Remove(InsTransform);
+    }
+
+    public void LuaTransformUpdate()
+    {
+        foreach(var transform in luaTransformMove.Values)
+        {            
+            transform.transform.position += transform.posMove * Time.deltaTime;
+        }
+
+        foreach(var transform in luaTransformRot.Values)
+        {
+            transform.transform.Rotate(transform.rotMove * Time.deltaTime);
+        }
     }
     #endregion
 

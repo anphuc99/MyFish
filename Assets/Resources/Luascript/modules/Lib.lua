@@ -3,6 +3,7 @@ Lib = {}
 Lib.ListComponent = {}
 Lib.ListClassName = {}
 Lib.ListGameObject = {}
+Lib.ListTransform = {}
 
 function Lib.handler(obj, method)
     return function(...)
@@ -124,8 +125,20 @@ function Lib.GetOrAddGameObject(InstanceIDGameObject)
     return Lib.ListGameObject[InstanceIDGameObject]
 end
 
-function Lib.SetObject(classname, InstanceID, InstanceIDGameObject ,initparam)
+function Lib.GetOrAddTransform(InsTransform, InstanceIDGameObject)    
+    if not Lib.ListTransform[InsTransform] then
+        local transform = Transform.new(InsTransform)
+        transform:Init(InstanceIDGameObject);        
+        Lib.ListTransform[InsTransform] = transform
+    end
+    return Lib.ListTransform[InsTransform]
+end
+
+function Lib.SetObject(classname, InstanceID, InstanceIDGameObject, InsTransform ,initparam)
     local obj = Lib.GetClass(classname).new(InstanceID,InstanceIDGameObject);
+
+    obj.transform = Lib.GetOrAddTransform(InsTransform, InstanceIDGameObject)
+
     if initparam then
         for key, value in pairs(initparam) do
             obj[key] = value

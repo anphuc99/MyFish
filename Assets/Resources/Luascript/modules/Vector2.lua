@@ -11,6 +11,15 @@ local setmetatable = setmetatable
 local rawset = rawset
 local rawget = rawget
 
+---@class Vector2
+---@field up Vector2
+---@field down Vector2
+---@field right Vector2
+---@field left Vector2
+---@field forward Vector2
+---@field back Vector2
+---@field zero Vector2
+---@field one Vector2
 Vector2 = 
 {
 	__cname = "Vector2"
@@ -115,6 +124,10 @@ function Vector2:Sub(b)
 	self.y = self.y - b.y
 	
 	return
+end
+
+function Vector2:toTable()
+	return {x = self.x, y = self.y}
 end
 
 Vector2.__tostring = function(self)

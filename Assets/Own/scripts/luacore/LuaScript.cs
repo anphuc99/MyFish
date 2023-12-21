@@ -1,5 +1,6 @@
 ﻿using MoonSharp.Interpreter;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities.Editor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -97,29 +98,14 @@ public class LuaScript : MonoBehaviour
     }
 
     private void SetLuaObject()
-    {
-        //LuaCore.luaScript.Globals.Remove("___param");
+    {        
         try
         {
             Table paramLua = ConvertLuaParamToLua();
-            //if (paramLua != null)
-            //{
-            //    LuaCore.SetGlobal("___param", ConvertLuaParamToLua());
-            //}
-            //string luaCode = @$"            
-            //local obj = Lib.GetClass(""{classLua}"").new({GetInstanceID()},{gameObject.GetInstanceID()});
-            //if ___param then
-            //    for key, value in pairs(___param) do
-            //        obj[key] = value
-            //    end               
-            //end
-
-            //return obj";
             var Lib = LuaCore.GetGlobal("Lib");
-            _luaObject =Lib.Table.Get("SetObject").Function.Call(classLua, GetInstanceID(), gameObject.GetInstanceID(), paramLua);            
-            LuaCore.Instance.AddLuaObject(GetInstanceID(), this);        
-            LuaCore.Instance.AddLuaObject(transform.GetInstanceID(), transform);
-
+            _luaObject =Lib.Table.Get("SetObject").Function.Call(classLua, GetInstanceID(), gameObject.GetInstanceID(),transform.GetInstanceID(), paramLua);            
+            LuaCore.Instance.AddLuaObject(GetInstanceID(), this);                    
+            LuaCore.Instance.LuaTransformAddTransform(transform.GetInstanceID(), transform);
         }
         catch(ScriptRuntimeException ex)
         {

@@ -7,6 +7,16 @@ function Unity.SetEnableComponent(InstanceIDGameObject, InstanceIDComponent, ena
 function Unity.SetObjectActive(InstanceIDGameObject, active)end
 ---@return Component
 function Unity.AddComponent(InstanceIDGameObject, className)end
+function Unity.TransformSetPosition(InsTransform, Vector3)end
+function Unity.TransformMove(InsTransform, Vector3)end
+function Unity.TransformStopMove(InsTransform)end
+---@return Vector3
+function Unity.TransformGetPosition(InsTransform)end
+---@return Quaternion
+function Unity.TransformGetRotation(InsTransform)end
+function Unity.TransformSetRotation(InsTransform, Quaternion)end
+function Unity.TransformSetSmootRote(InsTransform, Vector3)end
+function Unity.TransformStopSmootRote(InsTransform)end
 
 
 ---@class UnityEvent

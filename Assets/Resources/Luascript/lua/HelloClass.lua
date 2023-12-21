@@ -10,11 +10,16 @@ function HelloClass:Awake()
 end
 
 function HelloClass:Start()
-    print("HelloClass Start")
+    print("HelloClass Start")    
+    -- self.transform:Move(Vector3.up + Vector3.new(1,2,3))    
+    local quaternion = Quaternion.Euler(0,0,30)
+    
+    self.transform:SetRotation(quaternion)
 end
 
 function HelloClass:Update()
-    print("hahahahah")
+    local pos = self.transform:GetPosition()
+    print("hahahahah", pos.x, pos.y, pos.z)
 end
 
 

@@ -1,11 +1,9 @@
 Time = {
     deltaTime = 0,
-    fixedDeltaTime = 0
 }
 
 local dataTime = {}
 local dataUpdate = {}
-local dataFixedUpdate = {}
 local idTimer = 0;
 
 function Time:tick()
@@ -27,14 +25,8 @@ function Time:tick()
     end
 end
 
-function Time:fixedTick()
-    for func, value in pairs(dataFixedUpdate) do        
-        func(value)
-    end
-end
-
 ---@param func function
-function Time:start(func, time, isLoop)
+function Time:start(time, func, isLoop)
     local id = idTimer
     dataTime[idTimer] ={
         func = func,
@@ -46,6 +38,10 @@ function Time:start(func, time, isLoop)
     return id
 end
 
+function Time:stop(id)
+    dataTime[id] = nil
+end
+
 ---@param func function
 function Time:update(func, obj)
     dataUpdate[func] = obj or true
@@ -54,12 +50,4 @@ end
 ---@param func function
 function Time:unUpdate(func)
     dataUpdate[func] = nil
-end
----@param func function
-function Time:fixedUpdate(func, obj)    
-    dataFixedUpdate[func] = obj or true
-end
----@param func function
-function Time:unFixedUpdate(func)
-    dataFixedUpdate[func] = nil
 end

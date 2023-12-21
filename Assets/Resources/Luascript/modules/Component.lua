@@ -1,5 +1,6 @@
 ---@class Component
 ---@field gameObject GameObject
+---@field transform Transform
 ---@field InstanceID number
 ---@field Enable string
 Component = class("Component")
