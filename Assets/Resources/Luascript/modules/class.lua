@@ -57,8 +57,14 @@ function class(classname, super)
     else
         -- inherited from Lua Object
         if super then
-            cls = clone(super)            
-            cls.super = setmetatable({},{__index = super})
+            cls = {}
+            if Unity.IsEditor then                
+                cls = clone(super)
+                cls.super = super               
+            else
+                setmetatable(cls, {__index = super})
+                cls.super = super
+            end
         else
             cls = {ctor = function() end}
         end
@@ -69,7 +75,13 @@ function class(classname, super)
         cls.__index = cls
 
         function cls.new(...)                  
-            local instance = setmetatable({}, {__index = cls})
+
+            local instance
+            if Unity.IsEditor then
+                instance = clone(cls)
+            else
+                instance = setmetatable({}, cls)
+            end
             --instance.class = cls
             instance:ctor(...)
             return instance

@@ -3,6 +3,7 @@
 ---@field transform Transform
 ---@field InstanceID number
 ---@field Enable string
+---@field tag string
 Component = class("Component")
 
 function Component:ctor(InstanceID)        
@@ -13,8 +14,7 @@ function Component:ctor(InstanceID)
 end
 
 function Component:Init(InstanceIDgameObject)
-    print(InstanceIDgameObject, self.__cname)
-    self.gameObject = Lib.GetOrAddGameObject(InstanceIDgameObject)    
+    self.gameObject = Lib.GetOrAddGameObject(InstanceIDgameObject, self.tag)    
     Lib.RegisterComponent(self.gameObject:GetInstanceID(), self)
     self:OnInit()
 end
@@ -35,7 +35,7 @@ function Component:GetEnable()
 end
 
 function Component:SetEnable(enable)
-    self.prototype._enable = enable
+    self.prototype._enable = enable    
     Unity.SetEnableComponent(self.gameObject:GetInstanceID(), self:GetInstanceID(), enable)    
 end
 
@@ -46,8 +46,35 @@ function Component:Destroy(object)
     end
 
     if object.__cname == "GameObject" then
+        Lib.RemoveGameObject(object:GetInstanceID())
         Unity.DestroyObject(object:GetInstanceID())
-    elseif Lib.CheckTypeClass("Component", object) then
+    elseif Lib.CheckTypeClass("MonoBehaviour", object) then
         Unity.DestroyComponent(object.gameObject:GetInstanceID(), object:GetInstanceID())
+    elseif Lib.CheckTypeClass("Component", object) then
+        if object.OnDestroy then
+            object:OnDestroy()
+        end        
+        Unity.DestroyComponent(object.gameObject:GetInstanceID(), object:GetInstanceID())
+
     end
+end
+
+
+function Component:Instantiate(component)
+    if type(component) ~= "table" then
+        return
+    end
+    ---@type GameObject
+    local gameObject
+    if component.__cname == "GameObject" then
+        gameObject = component
+        local object = Unity.InstantiateLuaObject(gameObject:GetInstanceID())
+        return object
+    elseif Lib.CheckTypeClass("Component", component) then
+        gameObject = component.gameObject
+        local object = Unity.InstantiateLuaObject(gameObject:GetInstanceID())
+        local cpm = object:GetComponent(component.__cname)
+        return cpm
+    end
+
 end

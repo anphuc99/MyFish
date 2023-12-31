@@ -22,8 +22,7 @@ public class LuaCreateScript : Editor
             {
                 // Tạo tên file và đường dẫn đầy đủ trong thư mục được chọn
                 string fileName2 = fileName + ".lua";
-                string filePath = Path.Combine(selectedFolderPath, fileName2);
-
+                string filePath = Path.Combine(selectedFolderPath, fileName2).Replace('\\','/');
                 // Kiểm tra xem file đã tồn tại chưa
                 if (!File.Exists(filePath))
                 {
@@ -31,12 +30,12 @@ public class LuaCreateScript : Editor
                     string fileContent =@$"
 ---@class {fileName} : MonoBehaviour
 local {fileName} = class(""{fileName}"", MonoBehaviour)
-
-function {fileName}:start()
+{fileName}.__path = ""{filePath.Replace("Assets/Resources/Luascript/","")}""
+function {fileName}:Start()
     
 end
 
-function {fileName}:update()
+function {fileName}:Update()
     
 end
 

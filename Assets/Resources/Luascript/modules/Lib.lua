@@ -4,6 +4,7 @@ Lib.ListComponent = {}
 Lib.ListClassName = {}
 Lib.ListGameObject = {}
 Lib.ListTransform = {}
+Lib.ListSprite = {}
 
 function Lib.handler(obj, method)
     return function(...)
@@ -67,8 +68,7 @@ end
 function Lib.RegisterComponent(InstanceIDGameObject, obj)
     if Lib.ListComponent[InstanceIDGameObject] == nil then
         Lib.ListComponent[InstanceIDGameObject] = {}
-    end
-    print(InstanceIDGameObject, obj.__cname)
+    end    
     table.insert(Lib.ListComponent[InstanceIDGameObject], obj)
 end
 ---@param InstanceIDGameObject number
@@ -116,28 +116,46 @@ function Lib.GetClass(classname)
     return Lib.ListClassName[classname]
 end
 
-function Lib.GetOrAddGameObject(InstanceIDGameObject)
+function Lib.GetOrAddGameObject(InstanceIDGameObject, tag)
     if not Lib.ListGameObject[InstanceIDGameObject] then
         local gameObject = GameObject.new(InstanceIDGameObject)
+        gameObject.tag = tag
         Lib.ListGameObject[InstanceIDGameObject] = gameObject
     end
 
     return Lib.ListGameObject[InstanceIDGameObject]
 end
 
-function Lib.GetOrAddTransform(InsTransform, InstanceIDGameObject)    
+function Lib.GetOrAddTransform(InsTransform, InstanceIDGameObject, tag)    
     if not Lib.ListTransform[InsTransform] then
         local transform = Transform.new(InsTransform)
+        transform.tag = tag
         transform:Init(InstanceIDGameObject);        
-        Lib.ListTransform[InsTransform] = transform
+        transform.gameObject.transform = transform
+        Lib.ListTransform[InsTransform] = transform        
     end
     return Lib.ListTransform[InsTransform]
 end
 
-function Lib.SetObject(classname, InstanceID, InstanceIDGameObject, InsTransform ,initparam)
-    local obj = Lib.GetClass(classname).new(InstanceID,InstanceIDGameObject);
+function Lib.RemoveGameObject(InstanceIDGameObject)
+    local gameObject = Lib.GetOrAddGameObject(InstanceIDGameObject)
+    Lib.ListTransform[gameObject.transform:GetInstanceID()] = nil
+    Lib.ListGameObject[InstanceIDGameObject] = nil
+end
 
-    obj.transform = Lib.GetOrAddTransform(InsTransform, InstanceIDGameObject)
+function Lib.GetOrAddSprite(InsSprite)
+    if not Lib.ListSprite[InsSprite] then
+        local sprite = Sprite.new(InsSprite)
+        Lib.ListSprite[InsSprite] = sprite
+    end
+    return Lib.ListSprite[InsSprite]
+end
+
+function Lib.SetObject(classname, InstanceID, InstanceIDGameObject, InsTransform ,initparam, tag)        
+    local obj = Lib.GetClass(classname).new(InstanceID,InstanceIDGameObject);
+    obj.tag = tag
+
+    obj.transform = Lib.GetOrAddTransform(InsTransform, InstanceIDGameObject, tag)
 
     if initparam then
         for key, value in pairs(initparam) do
@@ -146,4 +164,43 @@ function Lib.SetObject(classname, InstanceID, InstanceIDGameObject, InsTransform
     end
     obj:Init(InstanceIDGameObject);
     return obj
+end
+
+function Lib.ExecuteFunction(obj, functionName,...)
+    if(type(obj[functionName]) == "function") then
+        return obj[functionName](obj,...)    
+    end
+end
+
+function Lib.GetAttrObject(obj, attr)
+    return obj[attr]
+end
+
+function Lib.SetAttrObject(obj, attr, value)
+    obj[attr] = value
+end
+
+---@param obj Component
+---@param path string
+function Lib.RealTimeCompiler(obj,path)
+    print(path)
+    local cls = require(path)
+    local c = cls.new()
+    c:Update()
+    obj:UniInit()
+    print("co có")
+    for key, value in pairs(c) do
+        if type(value) == "function" then
+            print("sao lay được không ")
+            obj[key] = value
+        end
+    end
+    obj:Update()
+    obj:OnInit()
+    if type(obj.Update) == "function" then            
+        if obj.gameObject:GetActive() then
+            obj:DisableUpdate()
+            obj:EnableUpdate()                    
+        end
+    end
 end

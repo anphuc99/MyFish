@@ -1,2 +1,0 @@
-require "HelloClass"
-require "Hi"

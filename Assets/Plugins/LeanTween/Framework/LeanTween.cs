@@ -2885,6 +2885,16 @@ public class LeanTween : MonoBehaviour {
         }
     }
 
+    public static LTDescr get(int uniqueId)
+    {
+        int backId = uniqueId & 0xFFFF;
+        int backCounter = uniqueId >> 16;
+        if (tweens[backId].counter == backCounter)
+        {
+            return tweens[backId];
+        }
+        return null;
+    }
 
 } // End LeanTween class
 
