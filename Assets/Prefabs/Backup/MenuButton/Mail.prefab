@@ -1,0 +1,490 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &630584219802166225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2752158610635872627}
+  - component: {fileID: 5402358282861191769}
+  - component: {fileID: 1460108414887504740}
+  m_Layer: 5
+  m_Name: notify
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &2752158610635872627
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630584219802166225}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8329078813234017656}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -6, y: -11.919}
+  m_SizeDelta: {x: 17.84, y: 17.837}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5402358282861191769
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630584219802166225}
+  m_CullTransparentMesh: 1
+--- !u!114 &1460108414887504740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630584219802166225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: ce195ccf7371ef04fa70b00b05d62dde, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4037205319196549248
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5726728103784004404}
+  - component: {fileID: 4526045387431178337}
+  - component: {fileID: 1656870355736400491}
+  m_Layer: 5
+  m_Name: Shadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5726728103784004404
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4037205319196549248}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8329078813234017656}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -3}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4526045387431178337
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4037205319196549248}
+  m_CullTransparentMesh: 1
+--- !u!114 &1656870355736400491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4037205319196549248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 5c7fc18b2e5432048b69e21ac3109306, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &8264514750994930299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4813855311837433802}
+  - component: {fileID: 2170020956827404798}
+  - component: {fileID: 8980033913316252566}
+  m_Layer: 5
+  m_Name: IconMail
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4813855311837433802
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8264514750994930299}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8329078813234017656}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2170020956827404798
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8264514750994930299}
+  m_CullTransparentMesh: 1
+--- !u!114 &8980033913316252566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8264514750994930299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 23e61fb85a000dd4ca7ee09aa602bf57, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &9199363941732391192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8329078813234017656}
+  - component: {fileID: 6514906278521210726}
+  - component: {fileID: 6009750240302060356}
+  m_Layer: 5
+  m_Name: Mail
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8329078813234017656
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9199363941732391192}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5726728103784004404}
+  - {fileID: 4813855311837433802}
+  - {fileID: 2752158610635872627}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 80}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6514906278521210726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9199363941732391192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 8980033913316252566}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6009750240302060356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9199363941732391192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cbaa15afc1e1a14d99a2db12eaeca35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filePathLua: lua/Menu/MenuButton/MenuBtnMail.lua
+  classLua: MenuBtnMail
+  lastUpdate: ca6748b904ba06e19fd498b73709d03a43c4fbd862aeb992407697fc952876e7
+  params:
+  - param: menuManager
+    type: 6
+    string: 
+    number: 0
+    boolean: 0
+    table: []
+    gameObject: {fileID: 0}
+    transform: {fileID: 0}
+    luaComponent: {fileID: 0}
+    image: {fileID: 0}
+    sprite: {fileID: 0}
+    button: {fileID: 0}
+    text: {fileID: 0}
+    inputField: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
+    slider: {fileID: 0}
+    scrollbar: {fileID: 0}
+    spriteRenderer: {fileID: 0}
+    rectTransform: {fileID: 0}
+    luaScriptObject: {fileID: 0}
+    FSMC_Executer: {fileID: 0}
+    audioSource: {fileID: 0}
+    audioClip: {fileID: 0}
+    skeletonGraphic: {fileID: 0}
+    skeletonAnimation: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+    vector2: {x: 0, y: 0}
+    vector3: {x: 0, y: 0, z: 0}
+    quaternion: {x: 0, y: 0, z: 0, w: 0}
+    toggle: {fileID: 0}
+    textMeshPro: {fileID: 0}
+    TMP_InputField: {fileID: 0}
+  - param: name
+    type: 0
+    string: mail
+    number: 0
+    boolean: 0
+    table: []
+    gameObject: {fileID: 0}
+    transform: {fileID: 0}
+    luaComponent: {fileID: 0}
+    image: {fileID: 0}
+    sprite: {fileID: 0}
+    button: {fileID: 0}
+    text: {fileID: 0}
+    inputField: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
+    slider: {fileID: 0}
+    scrollbar: {fileID: 0}
+    spriteRenderer: {fileID: 0}
+    rectTransform: {fileID: 0}
+    luaScriptObject: {fileID: 0}
+    FSMC_Executer: {fileID: 0}
+    audioSource: {fileID: 0}
+    audioClip: {fileID: 0}
+    skeletonGraphic: {fileID: 0}
+    skeletonAnimation: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+    vector2: {x: 0, y: 0}
+    vector3: {x: 0, y: 0, z: 0}
+    quaternion: {x: 0, y: 0, z: 0, w: 0}
+    toggle: {fileID: 0}
+    textMeshPro: {fileID: 0}
+    TMP_InputField: {fileID: 0}
+  - param: btn
+    type: 9
+    string: 
+    number: 0
+    boolean: 0
+    table: []
+    gameObject: {fileID: 0}
+    transform: {fileID: 0}
+    luaComponent: {fileID: 0}
+    image: {fileID: 0}
+    sprite: {fileID: 0}
+    button: {fileID: 6514906278521210726}
+    text: {fileID: 0}
+    inputField: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
+    slider: {fileID: 0}
+    scrollbar: {fileID: 0}
+    spriteRenderer: {fileID: 0}
+    rectTransform: {fileID: 0}
+    luaScriptObject: {fileID: 0}
+    FSMC_Executer: {fileID: 0}
+    audioSource: {fileID: 0}
+    audioClip: {fileID: 0}
+    skeletonGraphic: {fileID: 0}
+    skeletonAnimation: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+    vector2: {x: 0, y: 0}
+    vector3: {x: 0, y: 0, z: 0}
+    quaternion: {x: 0, y: 0, z: 0, w: 0}
+    toggle: {fileID: 0}
+    textMeshPro: {fileID: 0}
+    TMP_InputField: {fileID: 0}
+  - param: icon
+    type: 7
+    string: 
+    number: 0
+    boolean: 0
+    table: []
+    gameObject: {fileID: 0}
+    transform: {fileID: 0}
+    luaComponent: {fileID: 0}
+    image: {fileID: 8980033913316252566}
+    sprite: {fileID: 0}
+    button: {fileID: 0}
+    text: {fileID: 0}
+    inputField: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
+    slider: {fileID: 0}
+    scrollbar: {fileID: 0}
+    spriteRenderer: {fileID: 0}
+    rectTransform: {fileID: 0}
+    luaScriptObject: {fileID: 0}
+    FSMC_Executer: {fileID: 0}
+    audioSource: {fileID: 0}
+    audioClip: {fileID: 0}
+    skeletonGraphic: {fileID: 0}
+    skeletonAnimation: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+    vector2: {x: 0, y: 0}
+    vector3: {x: 0, y: 0, z: 0}
+    quaternion: {x: 0, y: 0, z: 0, w: 0}
+    toggle: {fileID: 0}
+    textMeshPro: {fileID: 0}
+    TMP_InputField: {fileID: 0}
+  - param: notify
+    type: 4
+    string: 
+    number: 0
+    boolean: 0
+    table: []
+    gameObject: {fileID: 630584219802166225}
+    transform: {fileID: 0}
+    luaComponent: {fileID: 0}
+    image: {fileID: 0}
+    sprite: {fileID: 0}
+    button: {fileID: 0}
+    text: {fileID: 0}
+    inputField: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
+    slider: {fileID: 0}
+    scrollbar: {fileID: 0}
+    spriteRenderer: {fileID: 0}
+    rectTransform: {fileID: 0}
+    luaScriptObject: {fileID: 0}
+    FSMC_Executer: {fileID: 0}
+    audioSource: {fileID: 0}
+    audioClip: {fileID: 0}
+    skeletonGraphic: {fileID: 0}
+    skeletonAnimation: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+    vector2: {x: 0, y: 0}
+    vector3: {x: 0, y: 0, z: 0}
+    quaternion: {x: 0, y: 0, z: 0, w: 0}
+    toggle: {fileID: 0}
+    textMeshPro: {fileID: 0}
+    TMP_InputField: {fileID: 0}
+  isInitialized: 1
+  function: 
+  UnitParams: []

@@ -1,0 +1,533 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3130794828271872141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1787094971505624400}
+  - component: {fileID: 4737676004029174147}
+  - component: {fileID: 1646881102255779826}
+  m_Layer: 0
+  m_Name: FishManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1787094971505624400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3130794828271872141}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4737676004029174147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3130794828271872141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cbaa15afc1e1a14d99a2db12eaeca35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filePathLua: lua/Fish/FishManager.lua
+  classLua: FishManager
+  params:
+  - param: particle
+    type: 4
+    string: 
+    number: 0
+    boolean: 0
+    table: []
+    gameObject: {fileID: 5876904974747851783, guid: e8491d84280fbea428633a0104828bda, type: 3}
+    transform: {fileID: 0}
+    luaComponent: {fileID: 0}
+    image: {fileID: 0}
+    sprite: {fileID: 0}
+    button: {fileID: 0}
+    text: {fileID: 0}
+    inputField: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
+    slider: {fileID: 0}
+    scrollbar: {fileID: 0}
+    spriteRenderer: {fileID: 0}
+    rectTransform: {fileID: 0}
+    luaScriptObject: {fileID: 0}
+    FSMC_Executer: {fileID: 0}
+  isInitialized: 1
+  function: 
+  UnitParams: []
+--- !u!114 &1646881102255779826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3130794828271872141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cbaa15afc1e1a14d99a2db12eaeca35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filePathLua: lua/Fish/GetFishManager.lua
+  classLua: GetFishManager
+  params:
+  - param: FishPrefabTable
+    type: 3
+    string: 
+    number: 0
+    boolean: 0
+    table:
+    - param: 110001
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 5753f2ef960171047bc55edbbe423ba5, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110002
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 54af18e9547637f44a829aadd262405e, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110003
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 2a6378628202851469993fe874397a15, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110004
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: d28a5ff0a0a66424a8376ac010272219, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110005
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 040cbc4b9138ddb4a9a5d527d811ca36, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110006
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 2ebc8b347d9ec854fa595c867abf176a, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110007
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: c9936524c2107f845a8f81faa14de1e6, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110008
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 63c3ad2e38e606047a223357dde58b8b, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110009
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 0b825d33ca71a7347b6d18ca95999f13, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110010
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 5a1c128fa2de8314cab2fe8d74762183, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110011
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: efc331b1fee6a8c43a6b695b098ac152, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110012
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 5ebf479701283df4ba5b838ac5e6f044, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110013
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 017c7962ff8763c45b638e3290edcfe4, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110014
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: b66d6b8d4259b0149b66b73d61519142, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110015
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: e52c5d5d995a8904488fba4e8e60258a, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110016
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 1fdc48908e29e734d97d8716dff83c9e, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110017
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: b8ba97393763a5a4689542877fa25a34, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110018
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: b393873f94428ff4ab0aec235868ea7b, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110019
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 7f55d82a85233ef43ace4351356d27d1, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    - param: 110020
+      type: 4
+      string: 
+      number: 0
+      boolean: 0
+      table: []
+      gameObject: {fileID: 8753659878922642967, guid: 5e625986acac11445a11169ad5a04b22, type: 3}
+      transform: {fileID: 0}
+      luaComponent: {fileID: 0}
+      image: {fileID: 0}
+      sprite: {fileID: 0}
+      button: {fileID: 0}
+      text: {fileID: 0}
+      inputField: {fileID: 0}
+      textMeshProGUI: {fileID: 0}
+      slider: {fileID: 0}
+      scrollbar: {fileID: 0}
+      spriteRenderer: {fileID: 0}
+      rectTransform: {fileID: 0}
+      luaScriptObject: {fileID: 0}
+      FSMC_Executer: {fileID: 0}
+    gameObject: {fileID: 0}
+    transform: {fileID: 0}
+    luaComponent: {fileID: 0}
+    image: {fileID: 0}
+    sprite: {fileID: 0}
+    button: {fileID: 0}
+    text: {fileID: 0}
+    inputField: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
+    slider: {fileID: 0}
+    scrollbar: {fileID: 0}
+    spriteRenderer: {fileID: 0}
+    rectTransform: {fileID: 0}
+    luaScriptObject: {fileID: 0}
+    FSMC_Executer: {fileID: 0}
+  isInitialized: 1
+  function: 
+  UnitParams: []

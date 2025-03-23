@@ -1,0 +1,1 @@
+FirebaseRemoteConfig:SetDefaultValue("GameVersion", "v1000000")

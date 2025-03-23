@@ -73,7 +73,7 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testScript);
         test.name = "TestAttrNumber";
         DynValue _luaObject = test.luaObject;
-        DynValue num = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(_luaObject, "number");
+        DynValue num = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(_luaObject, "number");
         if(num.Type == DataType.Number)
         {
             if(test.@params.Find(x=>x.param == "number").number == num.Number)
@@ -93,7 +93,7 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testScript);
         test.name = "TestAttrString";
         DynValue _luaObject = test.luaObject;
-        DynValue num = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(_luaObject, "str");
+        DynValue num = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(_luaObject, "str");
         if (num.Type == DataType.String)
         {
             if (test.@params.Find(x => x.param == "str").@string == num.String)
@@ -113,7 +113,7 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testScript);
         test.name = "TestComponentGetInstanceID";
         DynValue _luaObject = test.luaObject;
-        DynValue id = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "GetInstanceID");
+        DynValue id = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "GetInstanceID");
         if(id.Type == DataType.Number)
         {
             if(test.GetInstanceID() == id.Number)
@@ -134,7 +134,7 @@ public class LuaTest : MonoBehaviour
         test.name = "TestComponentSetEnable";
         test.enabled = false;
         DynValue _luaObject = test.luaObject;
-        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "SetEnable", true);
+        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "SetEnable", true);
         if (test.enabled == true)
         {            
             LogTest("TestComponentSetEnable", true);
@@ -151,7 +151,7 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testScript);
         test.name = "TestComponentSetDisable";
         DynValue _luaObject = test.luaObject;
-        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "SetEnable", false);
+        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "SetEnable", false);
         if (test.enabled == false)
         {
             LogTest("TestComponentSetDisable", true);
@@ -169,7 +169,7 @@ public class LuaTest : MonoBehaviour
         test.name = "TestComponentDestroy";
         LuaScript test2 = Instantiate(testScript);
         DynValue _luaObject = test.luaObject;
-        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "Destroy", test2.luaObject);
+        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "Destroy", test2.luaObject);
         yield return null;
         if (test2.IsDestroyed())
         {
@@ -189,8 +189,8 @@ public class LuaTest : MonoBehaviour
         LuaScript test2 = Instantiate(testScript);
         DynValue _luaObject = test.luaObject;
         GameObject gameObject = test2.gameObject;
-        DynValue obj = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(test2.luaObject, "gameObject");
-        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "Destroy", obj);
+        DynValue obj = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(test2.luaObject, "gameObject");
+        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "Destroy", obj);
         yield return null;
         if (gameObject.IsDestroyed())
         {
@@ -208,10 +208,10 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testScript);
         test.name = "TestComponentInstantiateGameObject";
         LuaScript test2 = Instantiate(testScript);
-        DynValue obj = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(test2.luaObject, "gameObject");
+        DynValue obj = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(test2.luaObject, "gameObject");
         DynValue _luaObject = test.luaObject;
-        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "Instantiate", obj);
-        DynValue idobject = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(rs, "GetInstanceID");
+        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "Instantiate", obj);
+        DynValue idobject = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(rs, "GetInstanceID");
         if (idobject.Type == DataType.Number)
         {            
             // Tìm tất cả các đối tượng trong scene
@@ -240,10 +240,10 @@ public class LuaTest : MonoBehaviour
         test.name = "TestComponentInstantiate";
         LuaScript test2 = Instantiate(testScript);
         DynValue _luaObject = test.luaObject;
-        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "Instantiate", test2.luaObject);        
-        DynValue obj = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(rs, "gameObject");
-        DynValue idobject = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(obj, "GetInstanceID");
-        DynValue idcpm = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(rs, "GetInstanceID");
+        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "Instantiate", test2.luaObject);        
+        DynValue obj = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(rs, "gameObject");
+        DynValue idobject = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(obj, "GetInstanceID");
+        DynValue idcpm = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(rs, "GetInstanceID");
         if (idobject.Type == DataType.Number)
         {
             // Tìm tất cả các đối tượng trong scene
@@ -278,15 +278,15 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testComponent);
         test.name = "TestComponentGetComponent";
         DynValue _luaObject = test.luaObject;
-        DynValue hiCpm = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "GetComponent", "Test2");
-        DynValue idHi = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(hiCpm, "GetInstanceID");
+        DynValue hiCpm = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "GetComponent", "Test2");
+        DynValue idHi = LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(hiCpm, "GetInstanceID");
         if(idHi.Type == DataType.Number)
         {            
             LuaScript luaScript = test.GetComponents<LuaScript>().ToList().Find(x => x.classLua == "Test2");
             if(luaScript.GetInstanceID() == idHi.Number)
             {
                 var p = luaScript.@params.Find(x => x.param == "str");
-                DynValue str = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(hiCpm, "str");
+                DynValue str = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(hiCpm, "str");
                 if(p.@string == str.String)
                 {
                     LogTest("TestComponentGetComponent", true);
@@ -304,9 +304,9 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testComponent);
         test.name = "TestCoroutineWaitForSecond";
         DynValue _luaObject = test.luaObject;
-        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "TestCoroutineWaitForSecond");
+        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "TestCoroutineWaitForSecond");
         yield return new WaitForSeconds(3);
-        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(_luaObject, "testCoroutine");
+        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(_luaObject, "testCoroutine");
         if (rs.Type == DataType.Boolean && rs.Boolean)
         {
             LogTest("TestComponentGetComponent", true);
@@ -323,9 +323,9 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testComponent);
         test.name = "TestCoroutineWaitForFrame";
         DynValue _luaObject = test.luaObject;
-        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "TestCoroutineWaitForFrame");
+        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "TestCoroutineWaitForFrame");
         yield return new WaitForSeconds(3);
-        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(_luaObject, "testCoroutine");
+        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(_luaObject, "testCoroutine");
         if (rs.Type == DataType.Boolean && rs.Boolean)
         {
             LogTest("TestCoroutineWaitForFrame", true);
@@ -342,9 +342,9 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testComponent);
         test.name = "TestCoroutineWaitUntil";
         DynValue _luaObject = test.luaObject;
-        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "TestCoroutineWaitUntil");
+        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "TestCoroutineWaitUntil");
         yield return new WaitForSeconds(3);
-        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(_luaObject, "testCoroutine");
+        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(_luaObject, "testCoroutine");
         if (rs.Type == DataType.Boolean && rs.Boolean)
         {
             LogTest("TestCoroutineWaitUntil", true);
@@ -361,9 +361,9 @@ public class LuaTest : MonoBehaviour
         LuaScript test = Instantiate(testComponent);
         test.name = "TestCoroutineWaitCo";
         DynValue _luaObject = test.luaObject;
-        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.Call(_luaObject, "TestCoroutineWaitCo");
+        LuaCore.GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(_luaObject, "TestCoroutineWaitCo");
         yield return new WaitForSeconds(3);
-        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.Call(_luaObject, "testCoroutine");
+        DynValue rs = LuaCore.GetGlobal("Lib").Table.Get("GetAttrObject").Function.CallFunction(_luaObject, "testCoroutine");
         if (rs.Type == DataType.Boolean && rs.Boolean)
         {
             LogTest("TestCoroutineWaitCo", true);

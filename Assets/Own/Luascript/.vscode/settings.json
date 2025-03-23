@@ -1,0 +1,13 @@
+{
+    "Lua.diagnostics.disable": [
+        "undefined-field",
+        "undefined-doc-class",
+        "undefined-global"
+    ],
+    "files.exclude": {
+        "**/*.meta": true
+    },
+    "Lua.diagnostics.globals": [
+        "__path"
+    ]
+}

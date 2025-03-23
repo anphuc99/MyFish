@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4189937926285832916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1364389748833367947}
+  - component: {fileID: 9071881296390251523}
+  m_Layer: 0
+  m_Name: LuaCore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1364389748833367947
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4189937926285832916}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.13446102, y: -0.19936463, z: 165.23828}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9071881296390251523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4189937926285832916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83225363bfca1714bbec6e1dad021d52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modulesfile:
+  - modules/Json
+  - modules/require
+  - modules/Global
+  - modules/Math
+  - modules/update
+  - modules/Lib
+  - modules/SceneLoader
+  - modules/CsEvent
+  - modules/class
+  - modules/GameObject
+  - modules/Vector2
+  - modules/Vector3
+  - modules/Color
+  - modules/Quaternion
+  - modules/UI/Rect
+  - modules/Component
+  - modules/Transform
+  - modules/UI/RectTransform
+  - modules/MonoBehaviour
+  - modules/LeanTween
+  - modules/ServerHandler
+  - modules/Sprite
+  - modules/AudioClip
+  - modules/SpriteRenderer
+  - modules/AudioSource
+  - modules/Event
+  - modules/KeyCode
+  - modules/ScriptableObject
+  - modules/StateScriptable
+  - modules/UI/Image
+  - modules/UI/Button
+  - modules/UI/Text
+  - modules/UI/TextMeshPro
+  - modules/UI/TextMeshProGUI
+  - modules/UI/Slider
+  - modules/UI/Scrollbar
+  - modules/UI/InputField
+  - modules/UI/TMP_InputField
+  - modules/UI/Toggle
+  - modules/DataLocalManager
+  - modules/Popup/PopupManager
+  - modules/FSMC_Executer
+  - modules/FirebaseRemoteConfig
+  - modules/SkeletonGraphic
+  - modules/VisualScripting
+  - modules/InAppPurchase
+  - modules/File
+  - modules/Screen
+  - lua/Main
+  InitializerFile: lua/Initializer

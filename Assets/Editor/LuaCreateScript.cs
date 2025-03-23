@@ -30,7 +30,7 @@ public class LuaCreateScript : Editor
                     string fileContent =@$"
 ---@class {fileName} : MonoBehaviour
 local {fileName} = class(""{fileName}"", MonoBehaviour)
-{fileName}.__path = ""{filePath.Replace("Assets/Resources/Luascript/","")}""
+{fileName}.__path = __path
 function {fileName}:Start()
     
 end
@@ -39,7 +39,7 @@ function {fileName}:Update()
     
 end
 
-return {fileName}
+_G.{fileName} = {fileName}
 ";
 
                     // Ghi nội dung vào file

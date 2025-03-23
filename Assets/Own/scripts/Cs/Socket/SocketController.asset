@@ -1,0 +1,692 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ece13e57ab2a54e80667f7d20c2544, type: 3}
+  m_Name: SocketController
+  m_EditorClassIdentifier: 
+  StartPosition: {x: -148, y: 374}
+  AnyPosition: {x: 109, y: -253}
+  States:
+  - rid: 8968394556766420992
+  - rid: 8968394556766420993
+  - rid: 8968394556766420995
+  - rid: 8968394556766420997
+  - rid: 8968394556766420999
+  - rid: 8968394556766421002
+  - rid: 8968394556766421004
+  - rid: 8968394556766421006
+  - rid: 8968394556766421008
+  - rid: 8968394556766421010
+  - rid: 8968394556766421012
+  - rid: 8968394556766421014
+  - rid: 8968394556766421046
+  - rid: 8968394556766421063
+  AnyTransitions: []
+  StartingState:
+    rid: 8968394556766420992
+  Parameters:
+  - rid: 8968394556766421016
+  - rid: 8968394556766421028
+  - rid: 8968394556766421062
+  - rid: 8968394556766421034
+  - rid: 8968394556766421036
+  - rid: 8968394556766421042
+  - rid: 8968394556766421044
+  - rid: 8968394556766421061
+  - rid: 8968394556766421065
+  - rid: 8968394556766421066
+  - rid: 8968394556766421067
+  references:
+    version: 2
+    RefIds:
+    - rid: 8968394556766420992
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421070
+        Position: {x: 169, y: 374}
+        _name: State
+        TransitionsFrom:
+        - rid: 8968394556766421017
+        - rid: 8968394556766421018
+        - rid: 8968394556766421019
+        TransitionsTo:
+        - rid: 8968394556766421020
+        - rid: 8968394556766421021
+        - rid: 8968394556766421022
+        - rid: 8968394556766421048
+        - rid: 8968394556766421078
+        - rid: 8968394565911314433
+    - rid: 8968394556766420993
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421071
+        Position: {x: 528, y: 283}
+        _name: Connect
+        TransitionsFrom:
+        - rid: 8968394556766420996
+        TransitionsTo:
+        - rid: 8968394556766421001
+        - rid: 8968394556766421017
+    - rid: 8968394556766420995
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421072
+        Position: {x: 766, y: 153}
+        _name: Delay
+        TransitionsFrom:
+        - rid: 8968394556766420998
+        - rid: 8968394556766421000
+        TransitionsTo:
+        - rid: 8968394556766420996
+    - rid: 8968394556766420996
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394556766420993
+        _destinationState:
+          rid: 8968394556766420995
+        _name: Delay->Connected
+    - rid: 8968394556766420997
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421074
+        Position: {x: 574, y: -23}
+        _name: Connected
+        TransitionsFrom:
+        - rid: 8968394556766421020
+        TransitionsTo:
+        - rid: 8968394556766420998
+    - rid: 8968394556766420998
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421029
+        _originState:
+          rid: 8968394556766420995
+        _destinationState:
+          rid: 8968394556766420997
+        _name: Connected->ConnectFail
+    - rid: 8968394556766420999
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421073
+        Position: {x: 1062, y: 289}
+        _name: ConnectFail
+        TransitionsFrom:
+        - rid: 8968394556766421001
+        - rid: 8968394556766421003
+        TransitionsTo:
+        - rid: 8968394556766421000
+    - rid: 8968394556766421000
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421094
+        _originState:
+          rid: 8968394556766420995
+        _destinationState:
+          rid: 8968394556766420999
+        _name: Connected->Notication
+    - rid: 8968394556766421001
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421037
+        _originState:
+          rid: 8968394556766420999
+        _destinationState:
+          rid: 8968394556766420993
+        _name: Notication->Delay
+    - rid: 8968394556766421002
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394565911314432
+        Position: {x: 1319, y: 61}
+        _name: Notication
+        TransitionsFrom:
+        - rid: 8968394565911314433
+        TransitionsTo:
+        - rid: 8968394556766421003
+    - rid: 8968394556766421003
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421035
+        _originState:
+          rid: 8968394556766420999
+        _destinationState:
+          rid: 8968394556766421002
+        _name: Notication->Disconnect
+    - rid: 8968394556766421004
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours: []
+        Position: {x: 707, y: 401}
+        _name: Disconnect
+        TransitionsFrom:
+        - rid: 8968394556766421007
+        TransitionsTo:
+        - rid: 8968394556766421018
+    - rid: 8968394556766421006
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421045
+        Position: {x: 1164, y: 401}
+        _name: Notication2
+        TransitionsFrom:
+        - rid: 8968394556766421068
+        TransitionsTo:
+        - rid: 8968394556766421007
+    - rid: 8968394556766421007
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394556766421004
+        _destinationState:
+          rid: 8968394556766421006
+        _name: Notication->HTTPRequest
+    - rid: 8968394556766421008
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421076
+        Position: {x: 630, y: 565}
+        _name: HTTPRequest
+        TransitionsFrom:
+        - rid: 8968394556766421011
+        TransitionsTo:
+        - rid: 8968394556766421019
+    - rid: 8968394556766421010
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421077
+        Position: {x: 911, y: 646}
+        _name: Deay
+        TransitionsFrom:
+        - rid: 8968394556766421013
+        - rid: 8968394556766421015
+        - rid: 8968394556766421064
+        TransitionsTo:
+        - rid: 8968394556766421011
+    - rid: 8968394556766421011
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394556766421008
+        _destinationState:
+          rid: 8968394556766421010
+        _name: Deay->Success
+    - rid: 8968394556766421012
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421081
+        Position: {x: 271, y: 788}
+        _name: Success
+        TransitionsFrom:
+        - rid: 8968394556766421022
+        TransitionsTo:
+        - rid: 8968394556766421013
+    - rid: 8968394556766421013
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421083
+        _originState:
+          rid: 8968394556766421010
+        _destinationState:
+          rid: 8968394556766421012
+        _name: Success->Fail
+    - rid: 8968394556766421014
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421080
+        Position: {x: 666, y: 858}
+        _name: Fail
+        TransitionsFrom:
+        - rid: 8968394556766421021
+        TransitionsTo:
+        - rid: 8968394556766421015
+    - rid: 8968394556766421015
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421084
+        _originState:
+          rid: 8968394556766421010
+        _destinationState:
+          rid: 8968394556766421014
+        _name: Success->Fail
+    - rid: 8968394556766421016
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnConnect
+        _value: 0
+    - rid: 8968394556766421017
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421023
+        _originState:
+          rid: 8968394556766420992
+        _destinationState:
+          rid: 8968394556766420993
+        _name: State->Connect
+    - rid: 8968394556766421018
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421043
+        _originState:
+          rid: 8968394556766420992
+        _destinationState:
+          rid: 8968394556766421004
+        _name: State->Disconnect
+    - rid: 8968394556766421019
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421082
+        _originState:
+          rid: 8968394556766420992
+        _destinationState:
+          rid: 8968394556766421008
+        _name: State->HTTPRequest
+    - rid: 8968394556766421020
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394556766420997
+        _destinationState:
+          rid: 8968394556766420992
+        _name: Connected->State
+    - rid: 8968394556766421021
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394556766421014
+        _destinationState:
+          rid: 8968394556766420992
+        _name: Fail->State
+    - rid: 8968394556766421022
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394556766421012
+        _destinationState:
+          rid: 8968394556766420992
+        _name: Success->State
+    - rid: 8968394556766421023
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421016
+        Value: 1
+    - rid: 8968394556766421028
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: ConnectedSuccess
+        _value: 0
+    - rid: 8968394556766421029
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421028
+        Value: 1
+    - rid: 8968394556766421034
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnConnectedFail
+        _value: 0
+    - rid: 8968394556766421035
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421034
+        Value: 1
+    - rid: 8968394556766421036
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnRepeatConected
+        _value: 0
+    - rid: 8968394556766421037
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421036
+        Value: 1
+    - rid: 8968394556766421042
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnDisconnect
+        _value: 0
+    - rid: 8968394556766421043
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421042
+        Value: 1
+    - rid: 8968394556766421044
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: btnYesOnClick
+        _value: 0
+    - rid: 8968394556766421045
+      type: {class: PopupNotication, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        PopupID: 0
+        Title: "Th\xF4ng b\xE1o"
+        Description: "B\u1EA1n \u0111\xE3 b\u1ECB m\u1EA5t k\u1EBFt n\u1ED1i vui
+          l\xF2ng \u0111\u0103ng nh\u1EADp l\u1EA1i"
+        ShowBtnYes: 1
+        txtBtnYes: "X\xE1c nh\u1EADn"
+        btnYesHideOnClick: 1
+        ShowBtnNo: 0
+        txtBtnNo: "T\u1EEB ch\u1ED1i"
+        btnNoHideOnClick: 0
+    - rid: 8968394556766421046
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421075
+        Position: {x: 1029, y: 538}
+        _name: OnClick
+        TransitionsFrom:
+        - rid: 8968394556766421048
+        TransitionsTo:
+        - rid: 8968394556766421068
+    - rid: 8968394556766421048
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394556766421046
+        _destinationState:
+          rid: 8968394556766420992
+        _name: OnClick->State
+    - rid: 8968394556766421061
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnHTTPRequest
+        _value: 0
+    - rid: 8968394556766421062
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: ConnectedFail
+        _value: 0
+    - rid: 8968394556766421063
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394556766421079
+        Position: {x: 1029, y: 885}
+        _name: Error
+        TransitionsFrom:
+        - rid: 8968394556766421078
+        TransitionsTo:
+        - rid: 8968394556766421064
+    - rid: 8968394556766421064
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421085
+        _originState:
+          rid: 8968394556766421010
+        _destinationState:
+          rid: 8968394556766421063
+        _name: Deay->Error
+    - rid: 8968394556766421065
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnHTTPRequestSuccess
+        _value: 0
+    - rid: 8968394556766421066
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnHTTPRequestFail
+        _value: 0
+    - rid: 8968394556766421067
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnHTTPRequestError
+        _value: 0
+    - rid: 8968394556766421068
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394556766421069
+        _originState:
+          rid: 8968394556766421006
+        _destinationState:
+          rid: 8968394556766421046
+        _name: Notication->OnClick
+    - rid: 8968394556766421069
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421044
+        Value: 1
+    - rid: 8968394556766421070
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: Refresh
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421071
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: OnConnect
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421072
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: DelayConnected
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421073
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: ConnectedFail
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421074
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: ConnectedSuccess
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421075
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: BtnYesClick
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421076
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: OnSendHTTP
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421077
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: DelayHTTPRequest
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421078
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394556766421063
+        _destinationState:
+          rid: 8968394556766420992
+        _name: Error->State
+    - rid: 8968394556766421079
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: HTTPError
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421080
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: HTTPFail
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421081
+      type: {class: StateHelper, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        stateInit: 
+        onStateEnter: HTTPSuccess
+        onStateUpdate: 
+        onStateExit: 
+    - rid: 8968394556766421082
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421061
+        Value: 1
+    - rid: 8968394556766421083
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421065
+        Value: 1
+    - rid: 8968394556766421084
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421066
+        Value: 1
+    - rid: 8968394556766421085
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421067
+        Value: 1
+    - rid: 8968394556766421094
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421062
+        Value: 1
+    - rid: 8968394565911314432
+      type: {class: PopupNotication, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        PopupID: 0
+        Title: "Th\xF4ng b\xE1o"
+        Description: "M\u1EA5t k\u1EBFt n\u1ED1i v\u1EDBi m\xE1y ch\u1EE7, vui l\xF2ng
+          th\u1EED l\u1EA1i sau"
+        ShowBtnYes: 1
+        txtBtnYes: "X\xE1c nh\u1EADn"
+        btnYesHideOnClick: 1
+        ShowBtnNo: 0
+        txtBtnNo: "T\u1EEB ch\u1ED1i"
+        btnNoHideOnClick: 0
+    - rid: 8968394565911314433
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394565911314434
+        _originState:
+          rid: 8968394556766421002
+        _destinationState:
+          rid: 8968394556766420992
+        _name: Notication->State
+    - rid: 8968394565911314434
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394556766421044
+        Value: 1

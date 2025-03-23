@@ -113,7 +113,13 @@ public class LTDescr
 		return this;
 	}
 
-	public int uniqueId{
+    public LTDescr cancel()
+    {                
+        LeanTween.removeTween((int)this._id, this.uniqueId);
+        return this;
+    }
+
+    public int uniqueId{
 		get{ 
 			uint toId = _id | counter << 16;
 

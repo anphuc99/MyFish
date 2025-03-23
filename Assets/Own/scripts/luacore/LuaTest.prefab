@@ -96,7 +96,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: str
@@ -111,7 +111,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: obj
@@ -126,7 +126,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: trans
@@ -141,7 +141,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: image
@@ -156,7 +156,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: sprite
@@ -171,7 +171,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: btn
@@ -186,7 +186,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: txt
@@ -201,7 +201,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: tmp
@@ -216,7 +216,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: slider
@@ -231,7 +231,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   - param: scrollbar
@@ -246,7 +246,7 @@ MonoBehaviour:
     sprite: {fileID: 0}
     button: {fileID: 0}
     text: {fileID: 0}
-    textMeshPro: {fileID: 0}
+    textMeshProGUI: {fileID: 0}
     slider: {fileID: 0}
     scrollbar: {fileID: 0}
   isInitialized: 1

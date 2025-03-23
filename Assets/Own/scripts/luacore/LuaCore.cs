@@ -1,13 +1,20 @@
 ﻿using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Serialization.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Sirenix.OdinInspector;
 using SocketIOClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 
 public class LuaObject
@@ -16,19 +23,24 @@ public class LuaObject
     public Dictionary<int, UnityEngine.Component> components = new();
 }
 
-public struct LuaTransformMove
+//public class LuaTransformMove
+//{
+//    public Transform transform;
+//    public Vector3 posMove;
+//}
+
+//public struct LuaTransformRot
+//{
+//    public Transform transform;
+//    public Vector3 rotMove;
+//}
+
+public interface IUpdate
 {
-    public Transform transform;
-    public Vector3 posMove;
+    public void OnUpdate();
 }
 
-public struct LuaTransformRot
-{
-    public Transform transform;
-    public Vector3 rotMove;
-}
-
-public class LuaCore : MonoBehaviour
+public partial class LuaCore : MonoBehaviour
 {
     public static LuaCore Instance;
     private static Script luaScript;
@@ -39,93 +51,388 @@ public class LuaCore : MonoBehaviour
     
     private Dictionary<int, Dictionary<string, List<DynValue>>> luaEventData = new();
             
-    private Dictionary<int, LuaObject> luaObject = new(); 
-    private Dictionary<int, Transform> luaTransform = new();
-    private Dictionary<int, Sprite> luaSprite = new();
+    public List<IUpdate> UpdateHelper = new List<IUpdate>();
+    public Dictionary<int, LuaObject> luaObject = new(); 
+    public Dictionary<int, Transform> luaTransform = new();
+    public Dictionary<int, Sprite> luaSprite = new();
+    public Dictionary<int, AudioClip> luaAudioClip = new();
 
-    private Dictionary<int,LuaTransformMove> luaTransformMove = new();
-    private Dictionary<int,LuaTransformRot> luaTransformRot = new();
+    public Dictionary<int,LuaTransformMove> luaTransformMove = new();
+    public Dictionary<int,LuaTransformRot> luaTransformRot = new();
 
-    private Dictionary<string, DynValue> luaSocketIOCallBack = new();
+    public Dictionary<string, DynValue> luaSocketIOCallBack = new();
 
     private float fpsLua = 20;
     private float _timeRunLua;
     [SerializeField]
+    [OnValueChanged("pareToLuaFile")]
     private List<string> modulesfile = new List<string>();
+    [SerializeField]
+    private string InitializerFile;
 
-#if UNITY_EDITOR
-    public static string assetFile = "Assets/Resources/Luascript/";
-#else
-    private static string assetFile = Application.persistentDataPath + "Luascript/";
+#if !UNTY_BUILD_RELEASE
+    private string HttpLuaFile => "";
 #endif
-    #region Lua module
-    public void Awake()
-    {                
+
+#if UNITY_DEVELOPMENT
+    private string HttpLuaFile => RemoteConfigManager.GetValue(FirebaseKey.LuaPathDev);
+#elif UNITY_RELEASE
+    private string HttpLuaFile => RemoteConfigManager.GetValue(FirebaseKey.LuaPathRelease); 
+#endif
+    private KeyCode[] keyCodes;
+    private bool isInstall;
+    private string luaScriptText;
+
+#if !UNTY_BUILD_RELEASE
+    public static string assetFile = "Assets/Own/Luascript/";
+#else
+    private static string assetFile;
+#endif
+#region Lua module
+    private void Awake()
+    {
+#if UNTY_BUILD_RELEASE
+        assetFile = Path.Combine(Application.persistentDataPath , "bin/build.dat");
+        if(!Directory.Exists(Path.Combine(Application.persistentDataPath, "bin")))
+        {
+            Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "bin"));
+        }
+#endif
         Instance = this;
-        // Khởi tạo đối tượng Script
-        luaScript = new Script();
+    }
+
+    [Button]
+    public void pareToLuaFile()
+    {
+        string s = "return {\n";
+        foreach (string key in modulesfile)
+        {
+            if(key != "modules/require")
+            {
+                s += "\t\"" + key + "\",\n";
+            }
+        }
+        s += "}";
+        File.WriteAllText(Application.dataPath + "\\Own\\Luascript\\modules\\main.lua", s);
+        Debug.Log("file pare");
+    }
+
+    [Button]
+    public void Resets()
+    {
+        Destroy(gameObject);
+        Instantiate(gameObject);
+    }
+    public void Install()
+    {        
+        if(!isInstall)
+        {
+            RegisterUpdate();                
+            UserData.RegisterType<APIGameObject>();
+            UserData.RegisterType<APITransfrom>();
+            UserData.RegisterType<APIRectTransform>();
+            UserData.RegisterType<APISpriteRenderer>();
+            UserData.RegisterType<APIImage>();
+            UserData.RegisterType<APIText>();
+            UserData.RegisterType<APITextMeshProGUI>();
+            UserData.RegisterType<APIInputField>();
+            UserData.RegisterType<APISlider>();
+            UserData.RegisterType<APIButton>();
+            UserData.RegisterType<APILeanTween>();
+            UserData.RegisterType<APILTDescr>();
+            UserData.RegisterType<APISocketIO>();
+            UserData.RegisterType<APIDataLocalManager>();
+            UserData.RegisterType<APIPopupManager>();
+            UserData.RegisterType<APISceneLoader>();
+            UserData.RegisterType<APIFSMC_Executer>();        
+            UserData.RegisterType<APIFirebaseRemoteConfig>();        
+            UserData.RegisterType<APIAudioSource>();        
+            UserData.RegisterType<APISkeletonGraphic>();        
+            UserData.RegisterType<APIToggle>();        
+            UserData.RegisterType<APITextMeshPro>();        
+            UserData.RegisterType<APIVisualScripting>();        
+            UserData.RegisterType<APIFile>();        
+            UserData.RegisterType<APISprite>();        
+            UserData.RegisterType<APITMP_InputField>();        
+            UserData.RegisterType<APIInAppPurchase>();        
+            UserData.RegisterType<APIScreen>();        
+            UserData.RegisterType<APILuaEvent>();        
+            keyCodes = (KeyCode[])Enum.GetValues(typeof(KeyCode));
+            // Khởi tạo đối tượng Script
+            luaScript = new Script();
+        }
+        else
+        {
+            luaScript.Globals.Clear();
+            luaScript = new Script();
+        }
         UnityTable = new Table(luaScript);        
         UnityTableEvent = new Table(luaScript);
         // Thực thi mã Lua từ một xâu ký tự
-        luaScript.Globals["print"] = (Action<object[]>)Print;
-        luaScript.Globals["error"] = (Action<string>)Error;        
+        luaScript.Globals["print"] = (Action<object[]>)Print;    
         SetUnityTable();
         SetUnityTableEvent();
         luaScript.Globals["Unity"] = UnityTable;
         luaScript.Globals["UnityEvent"] = UnityTableEvent;
 
-        SetModulesJsonParser();
+        luaScript.Globals["APIGameObject"] = typeof(APIGameObject);
+        luaScript.Globals["APITransfrom"] = typeof(APITransfrom);
+        luaScript.Globals["APIRectTransform"] = typeof(APIRectTransform);
+        luaScript.Globals["APISpriteRenderer"] = typeof(APISpriteRenderer);
+        luaScript.Globals["APIImage"] = typeof(APIImage);
+        luaScript.Globals["APIText"] = typeof(APIText);
+        luaScript.Globals["APITextMeshProGUI"] = typeof(APITextMeshProGUI);
+        luaScript.Globals["APIInputField"] = typeof(APIInputField);
+        luaScript.Globals["APISlider"] = typeof(APISlider);
+        luaScript.Globals["APIButton"] = typeof(APIButton);
+        luaScript.Globals["APILeanTween"] = typeof(APILeanTween);
+        luaScript.Globals["APILTDescr"] = typeof(APILTDescr);
+        luaScript.Globals["APISocketIO"] = typeof(APISocketIO);
+        luaScript.Globals["APIDataLocalManager"] = typeof(APIDataLocalManager);
+        luaScript.Globals["APIPopupManager"] = typeof(APIPopupManager);
+        luaScript.Globals["APISceneLoader"] = typeof(APISceneLoader);
+        luaScript.Globals["APIFSMC_Executer"] = typeof(APIFSMC_Executer);
+        luaScript.Globals["APIFirebaseRemoteConfig"] = typeof(APIFirebaseRemoteConfig);
+        luaScript.Globals["APIAudioSource"] = typeof(APIAudioSource);
+        luaScript.Globals["APISkeletonGraphic"] = typeof(APISkeletonGraphic);
+        luaScript.Globals["APIToggle"] = typeof(APIToggle);
+        luaScript.Globals["APITextMeshPro"] = typeof(APITextMeshPro);
+        luaScript.Globals["APIVisualScripting"] = typeof(APIVisualScripting);
+        luaScript.Globals["APIFile"] = typeof(APIFile);
+        luaScript.Globals["APISprite"] = typeof(APISprite);
+        luaScript.Globals["APITMP_InputField"] = typeof(APITMP_InputField);
+        luaScript.Globals["APIInAppPurchase"] = typeof(APIInAppPurchase);
+        luaScript.Globals["APIScreen"] = typeof(APIScreen);
+        luaScript.Globals["APILuaEvent"] = typeof(APILuaEvent);
 
+
+        CancelInvoke("UpdateLua");
+        InvokeRepeating("UpdateLua", 0, 1/fpsLua);
 
         // run file lua script
         try
         {
+#if !UNTY_BUILD_RELEASE
             // set modules
             foreach (var module in modulesfile)
-            {            
-                DoString(LoadAsset(module), null, module.Replace('/','.'));
+            {
+                DoString(LoadAsset(module), null, module.Replace('/', '.'));
             }
-
+            DoString(LoadAsset(InitializerFile), null, InitializerFile.Replace('/', '.'));
             Timer = luaScript.Globals.Get("Time").Table;
+#else
+            LoadLuaCodeFromHttp();
+#endif
+            
         }
         catch (ScriptRuntimeException ex)
         {            
-            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage);
+            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage + "\n" + ex.StackTrace);
         }
-        catch (Exception ex)
-        {            
-            Debug.LogError("An error occurred: " + ex.Message);
-        }
+#if !UNTY_BUILD_RELEASE
+        DataManager data = new DataManager();
+        isInstall = true;
+        LeanTween.delayedCall(0.1f, () =>
+        {
+            EventManager.onLuaScriptLoadDone?.Invoke();
+        });
+#endif
+    }    
 
-        StartCoroutine(LuaSocketIOInit());
-        DontDestroyOnLoad(gameObject);
-        SceneManager.LoadScene(1);        
+    private void UpdateLua()
+    {
+        if (!isInstall) return;
+        try
+        {
+            Timer["deltaTime"] = Math.Max(1f / fpsLua, Time.deltaTime);
+            Timer.Get("tick").Function.CallFunction();
+        }
+        catch (ScriptRuntimeException ex)
+        {
+            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage + "\n" + ex.StackTrace);
+        }        
     }
 
-    
+    private bool holdingDown;
     private void Update()
+    {
+        if(!isInstall) return;
+        try
+        {
+            if (Input.anyKeyDown)
+            {
+                KeyCode key = GetPressedKey();
+                if (key != KeyCode.None)
+                {
+                    var @event = GetGlobal("Event");
+                    @event.Table.Get("Emit").Function.CallFunction(@event, "KEY_DOWN", (int)GetPressedKey());
+                }
+            }
+
+            if (Input.anyKey)
+            {
+                KeyCode key = GetPressedKey();
+                if (key != KeyCode.None)
+                {
+                    var @event = GetGlobal("Event");
+                    @event.Table.Get("Emit").Function.CallFunction(@event, "KEY_PRESSED", (int)GetPressedKey());
+                }
+            }
+
+            if (Input.anyKey)
+            {
+                holdingDown = true;
+            }
+
+            if (!Input.anyKey && holdingDown)
+            {
+                KeyCode key = GetPressedKey();
+                if (key != KeyCode.None)
+                {
+                    var @event = GetGlobal("Event");
+                    @event.Table.Get("Emit").Function.CallFunction(@event, "KEY_UP", (int)GetPressedKey());
+                }
+                holdingDown = false;
+            }
+            #region Mount Down
+            if (Input.GetMouseButtonDown(0))
+            {
+                Table table = CreateTable();
+                table["code"] = 0;
+                // Lấy vị trí của chuột
+                Vector3 mousePosition = Input.mousePosition;
+
+                // Chuyển đổi từ tọa độ màn hình sang tọa độ thế giới
+                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+                table["position"] = GetGlobal("Vector3").Table.Get("new").Function.CallFunction(mousePosition.x, mousePosition.y, mousePosition.z);
+                var @event = GetGlobal("Event");
+                @event.Table.Get("Emit").Function.CallFunction(@event, "MOUSE_DOWN", table);
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                Table table = CreateTable();
+                table["code"] = 1;
+                // Lấy vị trí của chuột
+                Vector3 mousePosition = Input.mousePosition;
+
+                // Chuyển đổi từ tọa độ màn hình sang tọa độ thế giới
+                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+                table["position"] = GetGlobal("Vector3").Table.Get("new").Function.CallFunction(mousePosition.x, mousePosition.y, mousePosition.z);
+                var @event = GetGlobal("Event");
+                @event.Table.Get("Emit").Function.CallFunction(@event, "MOUSE_DOWN", table);
+            }
+
+            if (Input.GetMouseButtonDown(2))
+            {
+                Table table = CreateTable();
+                table["code"] = 2;
+                // Lấy vị trí của chuột
+                Vector3 mousePosition = Input.mousePosition;
+
+                // Chuyển đổi từ tọa độ màn hình sang tọa độ thế giới
+                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+                table["position"] = GetGlobal("Vector3").Table.Get("new").Function.CallFunction(mousePosition.x, mousePosition.y, mousePosition.z);
+                var @event = GetGlobal("Event");
+                @event.Table.Get("Emit").Function.CallFunction(@event, "MOUSE_DOWN", table);
+            }
+            #endregion
+
+            #region Mouse Up
+            if (Input.GetMouseButtonUp(0))
+            {
+                Table table = CreateTable();
+                table["code"] = 0;
+                // Lấy vị trí của chuột
+                Vector3 mousePosition = Input.mousePosition;
+
+                // Chuyển đổi từ tọa độ màn hình sang tọa độ thế giới
+                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+                table["position"] = GetGlobal("Vector3").Table.Get("new").Function.CallFunction(mousePosition.x, mousePosition.y, mousePosition.z);
+                var @event = GetGlobal("Event");
+                @event.Table.Get("Emit").Function.CallFunction(@event, "MOUSE_UP", table);
+            }
+
+            if (Input.GetMouseButtonUp(1))
+            {
+                Table table = CreateTable();
+                table["code"] = 1;
+                // Lấy vị trí của chuột
+                Vector3 mousePosition = Input.mousePosition;
+
+                // Chuyển đổi từ tọa độ màn hình sang tọa độ thế giới
+                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+                table["position"] = GetGlobal("Vector3").Table.Get("new").Function.CallFunction(mousePosition.x, mousePosition.y, mousePosition.z);
+                var @event = GetGlobal("Event");
+                @event.Table.Get("Emit").Function.CallFunction(@event, "MOUSE_UP", table);
+            }
+
+            if (Input.GetMouseButtonUp(2))
+            {
+                Table table = CreateTable();
+                table["code"] = 2;
+                // Lấy vị trí của chuột
+                Vector3 mousePosition = Input.mousePosition;
+
+                // Chuyển đổi từ tọa độ màn hình sang tọa độ thế giới
+                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+                table["position"] = GetGlobal("Vector3").Table.Get("new").Function.CallFunction(mousePosition.x, mousePosition.y, mousePosition.z);
+                var @event = GetGlobal("Event");
+                @event.Table.Get("Emit").Function.CallFunction(@event, "MOUSE_UP", table);
+            }
+            #endregion
+        }
+        catch (ScriptRuntimeException ex)
+        {
+            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage + "\n" + ex.StackTrace);
+        }
+
+        foreach(var update in UpdateHelper)
+        {
+            update.OnUpdate();
+        }
+        
+    }
+
+    private void OnDestroy()
+    {
+        DataManager.Instance.Save();
+    }
+
+    private void OnApplicationQuit()
+    {
+        DataManager.Instance.Save();
+    }
+
+    public static void ExecuteFuntion(DynValue luaObject, string funtion, params object[] param)
     {
         try
         {
-            if (_timeRunLua <= 0)
-            {
-                Timer["deltaTime"] = Math.Max(1f/fpsLua, Time.deltaTime);
-                Timer.Get("tick").Function.Call();
-                _timeRunLua = 1f / fpsLua - _timeRunLua;
-            }
-            else
-            {
-                _timeRunLua -= Time.deltaTime;
-            }
+            GetGlobal("Lib").Table.Get("ExecuteFunction").Function.CallFunction(luaObject, funtion, param);
         }
         catch (ScriptRuntimeException ex)
         {
-            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage);
+            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage + "\n" + ex.StackTrace);
         }
-
-        LuaTransformUpdate();
-        LuaSocketUpdate();
     }
+
+    private void RegisterUpdate()
+    {
+        UpdateHelper.Add(new UpdateLuaTransfrom());      
+    }
+
+    private KeyCode GetPressedKey()
+    {
+        foreach (KeyCode keyCode in keyCodes)
+        {
+            if (Input.GetKeyDown(keyCode))
+            {
+                return keyCode;
+            }
+        }
+        return KeyCode.None;
+    }
+
     public static DynValue DoString(string code, Table globalContext = null, string codeFriendlyName = null)
     {
         return luaScript.DoString(code, globalContext, codeFriendlyName);
@@ -140,19 +447,10 @@ public class LuaCore : MonoBehaviour
     {
         return new Table(luaScript);
     }
-    private void SetModulesJsonParser()
-    {
-        Table json = new Table(luaScript);
-
-        json["encode"] = (Func<Table, string>)JsonEncode;
-        json["decode"] = (Func<string, Table>)JsonDecode;
-
-        luaScript.Globals["Json"] = json;
-    }
 
     private void SetUnityTable()
     {
-#if UNITY_EDITOR
+#if !UNTY_BUILD_RELEASE
         UnityTable["IsEditor"] = true;
 #endif
 #if UNITY_ANDROID
@@ -161,54 +459,16 @@ public class LuaCore : MonoBehaviour
 #if UNITY_PC
         UnityTable["IsPC"] = true;
 #endif
+#if !UNTY_BUILD_RELEASE
         UnityTable["require"] =(Func<string, DynValue>)Require; 
-        UnityTable["DestroyObject"] =(Action<int>)LuaObjectDestroyLuaObject;
-        UnityTable["DestroyComponent"] =(Action<int, int>)LuaObjectDestroyLuaComponent;
-        UnityTable["SetEnableComponent"] =(Action<int, int, bool>)LuaObjectSetLuaComponentEnable;
-        UnityTable["SetObjectActive"] =(Action<int, bool>)LuaObjectSetLuaObjectActive;
-        UnityTable["AddComponent"] = (Func<int, string, DynValue>)LuaObjectAddLuaComponent;
-        UnityTable["InstantiateLuaObject"] = (Func<int, DynValue>)LuaObjectInstantiateLuaObject;
-        UnityTable["TransformSetPosition"] = (Action<int, Table>)LuaTransformSetPosition;
-        UnityTable["TransformMove"] = (Action<int, Table>)LuaTransformMove;
-        UnityTable["TransformStopMove"] = (Action<int>)LuaTransformStopMove;
-        UnityTable["TransformGetPosition"] = (Func<int, Table>)LuaTransformGetPosition;
-        UnityTable["TransformGetLocalPosition"] = (Func<int, Table>)LuaTransformGetLocalPosition;
-        UnityTable["TransformSetLocalPosition"] = (Action<int, Table>)LuaTransformSetLocalPosition;
-        UnityTable["TransformGetRotation"] = (Func<int, Table>)LuaTransformGetRotation;
-        UnityTable["TransformSetRotation"] = (Action<int, Table>)LuaTransformSetRotation;
-        UnityTable["TransformSetSmootRote"] = (Action<int, Table>)LuaTransformSetSmootRote;
-        UnityTable["TransformStopSmootRote"] = (Action<int>)LuaTransformStopSmootRote;
-        UnityTable["TransformGetChildCount"] = (Func<int, int>)LuaTransformGetChildCount;
-        UnityTable["TransformGetChild"] = (Func<int, int, Table>)LuaTransformGetChild;
-        UnityTable["LuaTransformGetAllChild"] = (Func<int, Table>)LuaTransformGetAllChild;
-        UnityTable["UISetImage"] = (Action<int, int, int>)LuaUISetImage;
-        UnityTable["UISetText"] = (Action<string, int, int>)LuaUISetText;
-        UnityTable["UISetTextMeshPro"] = (Action<string, int, int>)LuaUISetTextMeshPro;
-        UnityTable["UISetSliderValue"] = (Action<float, int, int>)LuaUISetSliderValue;
-        UnityTable["UISetMinSliderValue"] = (Action<float, int, int>)LuaUISetMinSliderValue;
-        UnityTable["UISetMaxSliderValue"] = (Action<float, int, int>)LuaUISetMaxSliderValue;
-        UnityTable["UISmootSliderValue"] = (Action<int, int, float, float, int, DynValue>)LuaUISmootSliderValue;
-        UnityTable["UIScrollBarSetValue"] = (Action<float, int, int>)LuaUIScrollBarSetValue;
-        UnityTable["UISmootScrollBaValue"] = (Action<int, int, float, float, int, DynValue>)LuaUISmootScrollBaValue;
-        UnityTable["LeanTweenMove"] = (Func<int, Table, float, int>)LuaLeanTweenMove;
-        UnityTable["LeanTweenLocalMove"] = (Func<int, Table, float, int>)LuaLeanTweenLocalMove;
-        UnityTable["LeanTweenScale"] = (Func<int, Table, float, int>)LuaLeanTweenScale;
-        UnityTable["LeanTweenRotate"] = (Func<int, Table, float, int>)LuaLeanTweenRotate;
-        UnityTable["LeanTweenMoveX"] = (Func<int, float, float, int>)LuaLeanTweenMoveX;
-        UnityTable["LeanTweenMoveY"] = (Func<int, float, float, int>)LuaLeanTweenMoveY;
-        UnityTable["LeanTweenMoveZ"] = (Func<int, float, float, int>)LuaLeanTweenMoveZ;        
-        UnityTable["LeanTweenLocalMoveX"] = (Func<int, float, float, int>)LuaLeanTweenLocalMoveX;
-        UnityTable["LeanTweenLocalMoveY"] = (Func<int, float, float, int>)LuaLeanTweenLocalMoveY;
-        UnityTable["LeanTweenLocalMoveZ"] = (Func<int, float, float, int>)LuaLeanTweenLocalMoveZ;
-        UnityTable["LeanTweenScaleX"] = (Func<int, float, float, int>)LuaLeanTweenScaleX;
-        UnityTable["LeanTweenScaleY"] = (Func<int, float, float, int>)LuaLeanTweenScaleY;
-        UnityTable["LeanTweenScaleZ"] = (Func<int, float, float, int>)LuaLeanTweenScaleZ;
-        UnityTable["LeanTweenRotateX"] = (Func<int, float, float, int>)LuaLeanTweenRotateX;
-        UnityTable["LeanTweenRotateY"] = (Func<int, float, float, int>)LuaLeanTweenRotateY;
-        UnityTable["LeanTweenRotateZ"] = (Func<int, float, float, int>)LuaLeanTweenRotateZ;
-        UnityTable["ExecuteFunctionLTDescr"] = (Action<int, string, DynValue>)ExecuteFunctionLTDescr;
-        UnityTable["SocketIOOn"] = (Action<string, DynValue>)LuaSocketIOOn;
-        UnityTable["SocketIOSendMessage"] = (Action<string, Table ,DynValue>)LuaSocketIOSendMessage;
+#endif
+#if !UNTY_BUILD_RELEASE
+        UnityTable["ReCompile"] = (Func<string, DynValue>)ReCompile;
+#endif
+        UnityTable["SocketIOHttp"] = (Action<string, Table ,DynValue, DynValue>)LuaSocketIOHttp;
+        UnityTable["Logout"] = (Action)Logout;
+        UnityTable["ReLoad"] = (Action)ReLoad;
+        UnityTable["CopyText"] = (Action<string>)CopyText;
     }
 
     private void SetUnityTableEvent()
@@ -217,7 +477,8 @@ public class LuaCore : MonoBehaviour
         UnityTableEvent["UnRegiterEvent"] = (Action<int, string, DynValue>)UnityEvent_UnRegiterEvent;
         UnityTableEvent["RemoveInstanceID"] = (Action<int>)UnityEvent_RemoveInstanceID;        
     }
-    #endregion
+
+#endregion
     #region UnityTableEvent
     public void UnityEvent_RegiterEvent(int InstanceID, string eventName, DynValue func)
     {
@@ -249,8 +510,7 @@ public class LuaCore : MonoBehaviour
             if (!luaEventData[InstanceID].ContainsKey(eventName))
             {
                 return;
-            }
-            Debug.Log("Co xoa");
+            }            
             luaEventData[InstanceID][eventName].Remove(func);
         }
     }
@@ -263,16 +523,12 @@ public class LuaCore : MonoBehaviour
             {
                 try
                 {
-                    func.Function.Call(obj, @params);
+                    func.Function.CallFunction(obj, @params);
 
                 }
                 catch (ScriptRuntimeException ex)
                 {
-                    Debug.LogError("Lua runtime error: " + ex.DecoratedMessage);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError("An error occurred: " + ex.Message);
+                    Debug.LogError("Lua runtime error: " + ex.DecoratedMessage + "\n" + ex.StackTrace);
                 }
             }
         }
@@ -285,17 +541,18 @@ public class LuaCore : MonoBehaviour
     #endregion
 
     #region JsonModule
-    private string JsonEncode(Table table)
+    public static string JsonEncode(Table table)
     {
-        return JsonTableConverter.TableToJson(table);
+        Table json = GetGlobal("Json").Table;
+        return json.Get("encode").Function.CallFunction(table).String;
     }
 
-    private Table JsonDecode(string json)
+    public static Table JsonDecode(string json)
     {
-        return JsonTableConverter.JsonToTable(json);
+        Table luaJson = GetGlobal("Json").Table;
+        return luaJson.Get("decode").Function.CallFunction(json).Table;
     }
     #endregion
-
     #region LuaObject
     public void LuaObjectAddLuaObject(int InstanceID, UnityEngine.Component component)
     {
@@ -314,20 +571,26 @@ public class LuaCore : MonoBehaviour
         int GameObjectInstanceID = gameObject.GetInstanceID();
         if (!this.luaObject.ContainsKey(GameObjectInstanceID))
         {
+            if(gameObject.scene.name != null)
+            {
+                OnDestroyDispatcher onDestroyDispatcher = gameObject.GetOrAddComponent<OnDestroyDispatcher>();
+                onDestroyDispatcher.OnObjectDestroyed = (obj) => StartCoroutine(RemoveGameObject(obj));
+            }
             this.luaObject.Add(GameObjectInstanceID, new LuaObject()
             {
                 gameObject = gameObject.gameObject
             });
+            LuaTransformAddTransform(gameObject.transform.GetInstanceID(), gameObject.transform);
         }
     }
 
-    public GameObject LuaObjectGetLuaObject(int InstanceIDGameObject)
+    public IEnumerator RemoveGameObject(GameObject gameObject)
     {
-        if (luaObject.ContainsKey(InstanceIDGameObject))
-        {
-            return luaObject[InstanceIDGameObject].gameObject;
-        }
-        return null;
+        int GameObjectInstanceID = gameObject.GetInstanceID();
+        int TransInstanceID = gameObject.transform.GetInstanceID();        
+        yield return new WaitForSeconds(1);
+        luaObject.Remove(GameObjectInstanceID);
+        luaTransform.Remove(TransInstanceID);        
     }
 
     public UnityEngine.Component LuaObjectGetLuaComponent(int InstanceIDGameObject, int InstanceIDComponent)
@@ -342,64 +605,6 @@ public class LuaCore : MonoBehaviour
         return null;
     }
 
-    public void LuaObjectDestroyLuaObject(int InstanceIDGameObject)
-    {
-        if (luaObject.ContainsKey(InstanceIDGameObject))
-        {
-            luaTransform.Remove(luaObject[InstanceIDGameObject].gameObject.transform.GetInstanceID());
-            UnityEvent_Emit(null, luaObject[InstanceIDGameObject].gameObject.GetInstanceID(), "GameObjectDestroy");
-            Destroy(luaObject[InstanceIDGameObject].gameObject);
-            luaObject.Remove(InstanceIDGameObject); 
-        }
-    }
-
-    public void LuaObjectDestroyLuaComponent(int InstanceIDGameObject, int InstanceIDComponent)
-    {
-        UnityEngine.Component component = LuaObjectGetLuaComponent(InstanceIDGameObject, InstanceIDComponent);
-        if (component != null)
-        {
-            Destroy(component);
-            luaObject[InstanceIDGameObject].components.Remove(InstanceIDComponent);
-        }
-    }
-
-    public void LuaObjectSetLuaComponentEnable(int InstanceIDGameObject, int InstanceIDComponent, bool enable)
-    {
-        UnityEngine.Component component = LuaObjectGetLuaComponent(InstanceIDGameObject, InstanceIDComponent);                                        
-        MonoBehaviour monoBehaviour = (MonoBehaviour)component;
-        monoBehaviour.enabled = enable;
-        
-    }
-
-    public void LuaObjectSetLuaObjectActive(int InstanceIDGameObject, bool active)
-    {
-        if (luaObject.ContainsKey(InstanceIDGameObject)) 
-        {
-            luaObject[InstanceIDGameObject].gameObject.SetActive(active);
-        }
-    }
-
-    public DynValue LuaObjectAddLuaComponent(int InstanceIDGameObject, string nameClassLua)
-    {
-        if (luaObject.ContainsKey(InstanceIDGameObject))
-        {
-            LuaScript luaScript = luaObject[InstanceIDGameObject].gameObject.AddComponent<LuaScript>();
-            luaScript.classLua = nameClassLua;
-            luaScript.isInitialized = true;
-            luaScript.Awake();
-            return luaScript.luaObject;
-        }
-
-        return null;
-    }
-
-    public DynValue LuaObjectInstantiateLuaObject(int InstanceIDGameObject)
-    {
-        GameObject gameObject = Instantiate(luaObject[InstanceIDGameObject].gameObject);
-        LuaObjectAddLuaGameObject(gameObject);
-        return GetGlobal("Lib").Table.Get("GetOrAddGameObject").Function.Call(gameObject.GetInstanceID());
-    }
-
     #endregion
 
     #region LuaTransform
@@ -411,151 +616,8 @@ public class LuaCore : MonoBehaviour
             LuaObjectAddLuaGameObject(transform.gameObject);
         }
     }
-
-    public Table LuaTransformGetPosition(int InsTransform)
-    {
-        Table table = new Table(luaScript);
-        Transform transform = luaTransform[InsTransform];
-        table["x"] = transform.position.x;
-        table["y"] = transform.position.y;
-        table["z"] = transform.position.z;
-        return table;
-    }
-
-    public void LuaTransformSetPosition(int InsTransform, Table vector3)
-    {
-        if (luaTransform.ContainsKey(InsTransform))
-        {
-            Vector3 pos = new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));
-            Transform transform = luaTransform[InsTransform];
-            transform.position = pos;
-        }
-    }
-
-    public Table LuaTransformGetLocalPosition(int InsTransform)
-    {
-        Table table = new Table(luaScript);
-        Transform transform = luaTransform[InsTransform];
-        table["x"] = transform.localPosition.x;
-        table["y"] = transform.localPosition.y;
-        table["z"] = transform.localPosition.z;
-        return table;
-    }
-
-    public void LuaTransformSetLocalPosition(int InsTransform, Table vector3)
-    {
-        if (luaTransform.ContainsKey(InsTransform))
-        {
-            Vector3 pos = new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));
-            Transform transform = luaTransform[InsTransform];
-            transform.localPosition = pos;
-        }
-    }
-
-
-    public void LuaTransformMove(int InsTransform, Table vector3)
-    {
-        if(luaTransform.ContainsKey(InsTransform))
-        {
-            Vector3 pos = new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));
-            luaTransformMove.Add(InsTransform,new LuaTransformMove()
-            {
-                transform = luaTransform[InsTransform],
-                posMove = pos
-            });
-        }
-    }
-
-    public void LuaTransformStopMove(int InsTransform)
-    {
-        luaTransformMove.Remove(InsTransform);
-    }
-
-    public void LuaTransformSetRotation(int InsTransform, Table quaternion)
-    {
-        if (luaTransform.ContainsKey(InsTransform))
-        {
-            Quaternion rot = new Quaternion(Convert.ToSingle(quaternion.Get("x").Number), Convert.ToSingle(quaternion.Get("y").Number), Convert.ToSingle(quaternion.Get("z").Number), Convert.ToSingle(quaternion.Get("w").Number));
-            Transform transform = luaTransform[InsTransform];            
-            transform.rotation = rot;
-        }
-    }
-
-    public Table LuaTransformGetRotation(int InsTransform)
-    {
-        Table table = new Table(luaScript);
-        Transform transform = luaTransform[InsTransform];
-        table["x"] = transform.rotation.x;
-        table["y"] = transform.rotation.y;
-        table["z"] = transform.rotation.z;
-        table["w"] = transform.rotation.w;
-        return table;
-    }
-
-    public void LuaTransformSetSmootRote(int InsTransform, Table vector3)
-    {
-        if (luaTransform.ContainsKey(InsTransform))
-        {
-            Vector3 pos = new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));            
-            luaTransformRot.Add(InsTransform, new LuaTransformRot()
-            {
-                transform = luaTransform[InsTransform],
-                rotMove = pos
-            });
-        }
-    }
-
-    public void LuaTransformStopSmootRote(int InsTransform)
-    {
-        luaTransformRot.Remove(InsTransform);
-    }
-
-    public int LuaTransformGetChildCount(int InsTransform)
-    {        
-        Transform transform = luaTransform[InsTransform];
-        return transform.childCount;
-    }
-
-    public Table LuaTransformGetChild(int InsTransform, int index)
-    {
-        Transform transform = luaTransform[InsTransform];
-        Table table = CreateTable();
-        table["transform"] = transform.GetChild(index).GetInstanceID();
-        table["gameObject"] = transform.GetChild(index).gameObject.GetInstanceID();
-        LuaTransformAddTransform(transform.GetChild(index).GetInstanceID(), transform.GetChild(index));
-        return table;
-    }
-
-    public Table LuaTransformGetAllChild(int InsTransform)
-    {
-        Transform transform = luaTransform[InsTransform];
-        Table table = CreateTable();        
-        for(int i = 0; i < transform.childCount; i++)
-        {
-            Table table1 = CreateTable();
-            table1["transform"] = transform.GetChild(i).GetInstanceID();
-            table1["gameObject"] = transform.GetChild(i).gameObject.GetInstanceID();
-            table[i + 1] = table1;
-            LuaTransformAddTransform(transform.GetChild(i).GetInstanceID(), transform.GetChild(i));
-        }
-        return table;
-    }
-
-    public void LuaTransformUpdate()
-    {
-        foreach(var transform in luaTransformMove.Values)
-        {            
-            transform.transform.position += transform.posMove * Time.deltaTime;
-        }
-
-        foreach(var transform in luaTransformRot.Values)
-        {
-            transform.transform.Rotate(transform.rotMove * Time.deltaTime);
-        }
-    }
     #endregion
-
-    #region LuaUI
+    #region LuaAsset
     public void AddLuaSprite(Sprite sprite)
     {
         if(sprite != null)
@@ -567,311 +629,105 @@ public class LuaCore : MonoBehaviour
         }
     }
 
-    public void LuaUISetImage(int spriteID, int InstanceIDGameObject ,int InstanceIDComponent)
+    public void AddLuaAudioClip(AudioClip audioClip)
     {
-        if(luaSprite.ContainsKey(spriteID))
+        if (audioClip != null)
         {
-            Image image = (Image)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-            image.sprite = luaSprite[spriteID];
-        }        
-    }
-
-    public void LuaUISetText(string text, int InstanceIDGameObject, int InstanceIDComponent)
-    {
-        Text txt = (Text)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-        txt.text = text;
-    }
-
-    public void LuaUISetTextMeshPro(string text, int InstanceIDGameObject, int InstanceIDComponent)
-    {
-        TextMeshProUGUI txt = (TextMeshProUGUI)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-        txt.text = text;
-    }
-
-    public void LuaUISetSliderValue(float value, int InstanceIDGameObject, int InstanceIDComponent)
-    {
-        Slider slider = (Slider)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-        slider.value = value;
-    }
-
-    public void LuaUISetMinSliderValue(float value, int InstanceIDGameObject, int InstanceIDComponent)
-    {
-        Slider slider = (Slider)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-        slider.minValue = value;
-    }
-
-    public void LuaUISetMaxSliderValue(float value, int InstanceIDGameObject, int InstanceIDComponent)
-    {
-        Slider slider = (Slider)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-        slider.maxValue = value;
-    }
-
-    public void LuaUISmootSliderValue( int InstanceIDGameObject, int InstanceIDComponent, float toValue, float time, int leanTweenType, DynValue callback)
-    {
-        Slider slider = (Slider)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-        LeanTween.value(slider.gameObject, slider.value, toValue, time).setEase((LeanTweenType)leanTweenType).setOnUpdate((float value) =>
-        {
-            slider.value = value;
-        }).setOnComplete(() =>
-        {
-            if(callback.Type == DataType.Function)
+            if (!luaAudioClip.ContainsKey(audioClip.GetInstanceID()))
             {
-                callback.Function.Call();
+                luaAudioClip.Add(audioClip.GetInstanceID(), audioClip);
             }
-        });
+        }
     }
-
-    public void LuaUIScrollBarSetValue(float value, int InstanceIDGameObject, int InstanceIDComponent)
-    {
-        Scrollbar scrollbar = (Scrollbar)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-        scrollbar.value = value;
-    }
-
-    public void LuaUISmootScrollBaValue(int InstanceIDGameObject, int InstanceIDComponent, float toValue, float time, int leanTweenType, DynValue callback)
-    {
-        Scrollbar scrollbar = (Scrollbar)luaObject[InstanceIDGameObject].components[InstanceIDComponent];
-        LeanTween.value(scrollbar.gameObject, scrollbar.value, toValue, time).setEase((LeanTweenType)leanTweenType).setOnUpdate((float value) =>
-        {
-            scrollbar.value = value;
-        }).setOnComplete(() =>
-        {
-            if (callback.Type == DataType.Function)
-            {
-                callback.Function.Call();
-            }
-        });
-    }
-
     #endregion
 
     #region Socket IO
-    private class SocketIOOnResponses
-    {
-        public SocketIOResponse socketIOResponse; 
-        public DynValue dynvalue;
-    }
 
-    private List<SocketIOResponse> socketIOResponses = new List<SocketIOResponse>();
-    private List<SocketIOOnResponses> socketIOOnResponses = new List<SocketIOOnResponses>();
+    private void LuaSocketIOHttp(string uri, Table data, DynValue callBack, DynValue callBackError)
+    {        
+        uri =  DataCsManager.Instance.server + uri;
 
-
-    private IEnumerator LuaSocketIOInit()
-    {
-        yield return new WaitUntil(() =>
+        SocketManager.Instance.SendHTTP(uri, JsonEncode(data), (resp) =>
         {
-            return SocketManager.socket != null;
-        });
-        SocketManager.socket.On("__callBack", (res) =>
+            callBack.Function.CallFunction(resp);
+        }, (resp, err) =>
         {
-            socketIOResponses.Add(res);
+            callBackError.Function.CallFunction(resp, err);
         });
     }
 
-    private void LuaSocketUpdate()
+    private void Logout()
     {
-        // xử lý response            
-        foreach (SocketIOResponse res in socketIOResponses)
-        {
-            Table table = JsonDecode(res.ToString()).Get(1).Table;
-            string guid = table.Get("guid").String;
-            Table data = table.Get("data").Table;
-            if (luaSocketIOCallBack.ContainsKey(guid))
-            {
-                luaSocketIOCallBack[guid].Function.Call(data);
-                luaSocketIOCallBack.Remove(guid);
-            }
-        }
-        socketIOResponses.Clear();
-
-        foreach(var res in socketIOOnResponses)
-        {
-            Table table = JsonDecode(res.socketIOResponse.ToString());
-            res.dynvalue.Function.Call(table);
-        }
-
-        socketIOOnResponses.Clear();
+        DataCsManager.Instance.loginData = null;
+        SocketManager.Instance.Disconnected();
+        EventManager.onLogout?.Invoke();
     }
 
-    private void LuaSocketIOOn(string @event, DynValue func)
+    private void ReLoad()
     {
-        SocketManager.socket.On(@event, (res) =>
+        SceneLoader.Instance.LoadData();
+        SceneLoader.Instance.SetValue(0, false);
+        LeanTween.delayedCall(0.2f, () =>
         {
-            socketIOOnResponses.Add(new SocketIOOnResponses()
-            {
-                socketIOResponse = res,
-                dynvalue = func
-            });
+            EventManager.onReLoad?.Invoke();
+        });
+        LeanTween.delayedCall(0.4f, () =>
+        {
+            Install();
         });
     }
 
-    private void LuaSocketIOSendMessage(string @event, Table message, DynValue func)
-    {
-        if(func != null && func.Type == DataType.Function)
-        {
-            string guid = Guid.NewGuid().ToString();
-            message["__callBackGuid"] = guid;
-            luaSocketIOCallBack.Add(guid, func);
-        }
 
-        string json = JsonEncode(message);
-        SocketManager.socket.EmitAsync(@event,json);
-    }
 
     #endregion
-
-    #region LuaLeanTween
-
-    private int LuaLeanTweenMove(int InsGameObject, Table v3To, float time)
-    {
-        Vector3 vector3 = ConvertTableToVector3(v3To);
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.move(gameObject, vector3, time);
-        return tween.uniqueId;
+    #region Unity Helper
+    private void CopyText(string text)
+    {        
+        GUIUtility.systemCopyBuffer = text;        
     }
-
-
-    private int LuaLeanTweenScale(int InsGameObject, Table v3To, float time)
-    {
-        Vector3 vector3 = ConvertTableToVector3(v3To);
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.scale(gameObject, vector3, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenLocalMove(int InsGameObject, Table v3To, float time)
-    {
-        Vector3 vector3 = ConvertTableToVector3(v3To);
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.moveLocal(gameObject, vector3, time);
-        return tween.uniqueId;
-    }
-    
-    private int LuaLeanTweenRotate(int InsGameObject, Table v3To, float time)
-    {
-        Vector3 vector3 = ConvertTableToVector3(v3To);
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.rotate(gameObject, vector3, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenMoveX(int InsGameObject, float v3X, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.moveX(gameObject, v3X, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenMoveY(int InsGameObject, float v3Y, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.moveY(gameObject, v3Y, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenMoveZ(int InsGameObject, float v3Z, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.moveZ(gameObject, v3Z, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenLocalMoveX(int InsGameObject, float v3X, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.moveLocalX(gameObject, v3X, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenLocalMoveY(int InsGameObject, float v3Y, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.moveLocalY(gameObject, v3Y, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenLocalMoveZ(int InsGameObject, float v3Z, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.moveLocalZ(gameObject, v3Z, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenScaleX(int InsGameObject, float v3X, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.scaleX(gameObject, v3X, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenScaleY(int InsGameObject, float v3Y, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.scaleY(gameObject, v3Y, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenScaleZ(int InsGameObject, float v3Z, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.scaleZ(gameObject, v3Z, time);
-        return tween.uniqueId;
-    }        
-    
-    private int LuaLeanTweenRotateX(int InsGameObject, float v3X, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.rotateX(gameObject, v3X, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenRotateY(int InsGameObject, float v3Y, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.rotateY(gameObject, v3Y, time);
-        return tween.uniqueId;
-    }
-
-    private int LuaLeanTweenRotateZ(int InsGameObject, float v3Z, float time)
-    {
-        GameObject gameObject = luaObject[InsGameObject].gameObject;
-        var tween = LeanTween.rotateZ(gameObject, v3Z, time);
-        return tween.uniqueId;        
-    }    
-
-    private void ExecuteFunctionLTDescr(int tweenID,string functionName, DynValue value)
-    {
-        var tween = LeanTween.get(tweenID); 
-        if(tween != null)
-        {
-            switch(functionName)
-            {
-                case "setOnComplete":
-                    if(value != null && value.Type == DataType.Function)
-                    {
-                        tween.setOnComplete(() =>
-                        {
-                            value.Function.Call();
-                        });
-                    }
-                    break;
-                case "setEase":
-                    if (value != null && value.Type == DataType.Number)
-                    {
-                        tween.setEase((LeanTweenType)value.Number);
-                    }
-                    break;
-            }
-        }
-    }
-
     #endregion
+#if !UNTY_BUILD_RELEASE
+    private DynValue ReCompile(string path)
+    {
+        string luaCode = $"local __path = '{path}';" + File.ReadAllText(assetFile + path);
+        return luaScript.DoString(luaCode, null, path);
+    }
+#endif
 
-    private Vector3 ConvertTableToVector3(Table vector3)
+    public Vector3 ConvertTableToVector3(Table vector3)
     {
         return new Vector3(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number));
     }
+    
+    public Vector3 ConvertTableToVector2(Table vector3)
+    {
+        return new Vector2(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number));
+    }
 
-    private Table ConvertV3ToTable(Vector3 vector3)
+    public Quaternion ConvertTableToQuaternion(Table vector3)
+    {
+        return new Quaternion(Convert.ToSingle(vector3.Get("x").Number), Convert.ToSingle(vector3.Get("y").Number), Convert.ToSingle(vector3.Get("z").Number), Convert.ToSingle(vector3.Get("w").Number));
+    }
+
+    public Table ConvertQuaternionToTable(Quaternion quaternion)
+    {
+        Table table = CreateTable();
+        table["x"] = quaternion.x;
+        table["y"] = quaternion.y;
+        table["z"] = quaternion.z;
+        table["w"] = quaternion.w;
+        return table;
+    }
+
+    public Table ConvertV2ToTable(Vector2 vector2)
+    {
+        Table table = CreateTable();
+        table["x"] = vector2.x;
+        table["y"] = vector2.y;        
+        return table;
+    }
+
+    public Table ConvertV3ToTable(Vector3 vector3)
     {
         Table table = CreateTable();
         table["x"] = vector3.x; 
@@ -879,17 +735,44 @@ public class LuaCore : MonoBehaviour
         table["z"] = vector3.z;
         return table;
     }
+
+    public Table ConvertRectToTable(Rect rect)
+    {
+        Table table = CreateTable();
+        table["x"] = rect.x;
+        table["y"] = rect.y;
+        table["width"] = rect.width;
+        table["height"] = rect.height;
+        return table;
+    }    
+
+    public Color ConverTableToColor(Table table)
+    {
+        return new Color(Convert.ToSingle(table.Get("r").Number), Convert.ToSingle(table.Get("g").Number), Convert.ToSingle(table.Get("b").Number), Convert.ToSingle(table.Get("a").Number));
+    }
+    
+    public Table ConverColorToTable(Color color)
+    {
+        Table table = CreateTable();
+        table["r"] = color.r;
+        table["g"] = color.g;
+        table["b"] = color.b;
+        table["a"] = color.a;
+        return table;
+    }
+
     public DynValue Require(string path)
     {
         try
         {
-            string luaCode = $"local __path = '{path}'"+LoadAsset("lua/" + path.Replace('.', '/'));
+            string filePath = "lua/" + path.Replace('.', '/');
+            string luaCode = $"local __path = '{filePath}.lua';"+LoadAsset(filePath);
             return luaScript.DoString(luaCode, null, path);
 
         }
         catch (ScriptRuntimeException ex)
         {
-            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage);
+            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage + "\n" + ex.StackTrace);
             return null;
         }
     }
@@ -901,14 +784,21 @@ public class LuaCore : MonoBehaviour
         {
             log[i] = Convert.ToString(strs[i]);
         }
-        
-        Debug.Log(string.Join('\t', log));
+#if UNITY_EDITOR
+        CustomLogger.Log(string.Join('\t', log),1);
+#else
+        Debug.Log(string.Join('\t', log));    
+#endif
     }
 
     private void Error(string str)
     {
-
+#if UNITY_EDITOR
+        CustomLogger.Log(str,2);
+#else
         Debug.LogError(str);
+#endif
+        
     }
 
     public static string LoadAsset(string path)
@@ -917,5 +807,114 @@ public class LuaCore : MonoBehaviour
         return data;
     }
 
+    public static string DecodeLua(string path)
+    {
+        return "";
+    }
 
+
+    private void LoadLuaCodeFromHttp()
+    {
+        if (string.IsNullOrEmpty(luaScriptText))
+        {
+            StartCoroutine(LoadFileLua());
+        }
+        else
+        {
+            LoadLuaFormServer(luaScriptText);
+        }
+    }
+
+    private IEnumerator LoadFileLua()
+    {
+        if (CheckSum())
+        {
+            string text = File.ReadAllText(assetFile);
+            LoadLuaFormServer(text);
+        }
+        else
+        {
+            bool isSuccess = false;
+            StoreManager.Instance.Read(HttpLuaFile, (txt) =>
+            {
+                isSuccess = true;
+                luaScriptText = txt;
+            });
+            yield return new WaitUntil(() => isSuccess);        
+            File.WriteAllText(assetFile, luaScriptText);
+            LoadLuaFormServer(luaScriptText);
+        }
+    }
+
+    public bool CheckSum()
+    {
+        if (!File.Exists(assetFile))
+        {
+            return false;
+        }
+        string checkSum = AssetBundleManager.GenerateSHA256ChecksumForFile(assetFile);
+        return checkSum == RemoteConfigManager.GetValue(FirebaseKey.LuaCheckSum);
+    }
+
+    public string DecryptLuaScript(string luatext)
+    {
+        int[] enkey = { 36, 48, 43, 112, 101, 105, 67, 89, 75, 83, 79, 38, 85, 74, 81, 90, 89, 94, 120, 83, 98, 33, 65, 85, 106, 70, 51, 79, 101, 79, 77, 76 };
+        byte[] key = new byte[enkey.Length];
+        for (int i = 0; i < enkey.Length; i++)
+        {
+            key[i] = Convert.ToByte(enkey[i]);
+        }
+        byte[] iv = { 50, 135, 251, 183, 12, 14, 254, 193, 24, 121, 132, 152, 204, 141, 211, 119 };
+        byte[] cipherText = Convert.FromBase64String(luatext);
+        return EncryptionHelper.Decrypt(cipherText, key, iv);
+    }
+
+    private void LoadLuaFormServer(string text)
+    {
+        try
+        {
+            luaScriptText = text;
+            string luaScript = DecryptLuaScript(luaScriptText);
+            DoString(luaScript);
+
+        }
+        catch (ScriptRuntimeException ex)
+        {
+            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage + "\n" + ex.StackTrace);
+        }
+        Timer = luaScript.Globals.Get("Time").Table;
+        DataManager data = new DataManager();
+        isInstall = true;
+        LeanTween.delayedCall(0.1f, () =>
+        {
+            EventManager.onLuaScriptLoadDone?.Invoke();
+        });
+        Debug.Log("Get Completed");
+    }
+    
+    public bool CheckScript(DynValue dynValue)
+    {
+        if (dynValue == null)
+        {
+            return false;
+        }
+        return dynValue.Table.OwnerScript == luaScript;
+    }
+
+#if UNITY_EDITOR
+    private void OnGUI()
+    {
+        // Thiết lập vị trí và kích thước của nút
+        float buttonWidth = 100;
+        float buttonHeight = 50;
+        float buttonX = Screen.width - buttonWidth - 10; // 10 pixels from the right edge
+        float buttonY = 10; // 10 pixels from the top edge
+
+        // Tạo nút và kiểm tra xem có nhấn vào không
+        if (GUI.Button(new Rect(buttonX, buttonY, buttonWidth, buttonHeight), "Reload"))
+        {
+            ReLoad();            
+        }
+    }
+#endif
 }

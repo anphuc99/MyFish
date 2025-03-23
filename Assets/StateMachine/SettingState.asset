@@ -1,0 +1,302 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ece13e57ab2a54e80667f7d20c2544, type: 3}
+  m_Name: SettingState
+  m_EditorClassIdentifier: 
+  StartPosition: {x: 72, y: 265}
+  AnyPosition: {x: 200, y: 400}
+  States:
+  - rid: 8057184428032786433
+  - rid: 8057184428032786434
+  - rid: 8057184428032786435
+  - rid: 8057184428032786436
+  - rid: 8057184428032786437
+  - rid: 8057184428032786440
+  - rid: 8057184428032786445
+  AnyTransitions: []
+  StartingState:
+    rid: 8057184428032786433
+  Parameters:
+  - rid: 8057184381380067341
+  - rid: 8057184381380067361
+  - rid: 8057184381380067365
+  - rid: 8057184381380067366
+  - rid: 8057184428032786432
+  references:
+    version: 2
+    RefIds:
+    - rid: 8057184381380067341
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OpenPopupSetting
+        _value: 0
+    - rid: 8057184381380067361
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: onLogoutClick
+        _value: 0
+    - rid: 8057184381380067365
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: btnYesOnClick
+        _value: 0
+    - rid: 8057184381380067366
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: btnNoOnClick
+        _value: 0
+    - rid: 8057184428032786432
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: onClose
+        _value: 0
+    - rid: 8057184428032786433
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours: []
+        Position: {x: 262.20004, y: 103.5}
+        _name: controller
+        TransitionsFrom:
+        - rid: 8057184428032786441
+        TransitionsTo:
+        - rid: 8057184428032786454
+    - rid: 8057184428032786434
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8057184428032786462
+        Position: {x: 466, y: -42}
+        _name: Open
+        TransitionsFrom:
+        - rid: 8057184428032786442
+        - rid: 8057184428032786448
+        TransitionsTo:
+        - rid: 8057184428032786441
+        - rid: 8057184428032786447
+    - rid: 8057184428032786435
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8057184428032786463
+        Position: {x: 765, y: 12}
+        _name: Hide
+        TransitionsFrom:
+        - rid: 8057184428032786443
+        TransitionsTo:
+        - rid: 8057184428032786442
+    - rid: 8057184428032786436
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8057184428032786465
+        Position: {x: 316, y: -272}
+        _name: Logout
+        TransitionsFrom:
+        - rid: 8057184428032786446
+        TransitionsTo:
+        - rid: 8057184428032786444
+    - rid: 8057184428032786437
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8057184428032786464
+        Position: {x: 693, y: -202}
+        _name: Notify
+        TransitionsFrom:
+        - rid: 8057184428032786444
+        - rid: 8057184428032786447
+        TransitionsTo:
+        - rid: 8057184428032786443
+    - rid: 8057184428032786440
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8057184428032786469
+        Position: {x: 551, y: 158}
+        _name: Close
+        TransitionsFrom:
+        - rid: 8057184428032786454
+        TransitionsTo:
+        - rid: 8057184428032786448
+    - rid: 8057184428032786441
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8057184428032786453
+        _originState:
+          rid: 8057184428032786433
+        _destinationState:
+          rid: 8057184428032786434
+        _name: controller->Open
+    - rid: 8057184428032786442
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8057184428032786456
+        _originState:
+          rid: 8057184428032786434
+        _destinationState:
+          rid: 8057184428032786435
+        _name: Open->Hide
+    - rid: 8057184428032786443
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8057184428032786435
+        _destinationState:
+          rid: 8057184428032786437
+        _name: Hide->Notify
+    - rid: 8057184428032786444
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8057184428032786458
+        _originState:
+          rid: 8057184428032786437
+        _destinationState:
+          rid: 8057184428032786436
+        _name: Notify->Login
+    - rid: 8057184428032786445
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8057184428032786466
+        Position: {x: 175, y: -417}
+        _name: Hide 2
+        TransitionsFrom: []
+        TransitionsTo:
+        - rid: 8057184428032786446
+    - rid: 8057184428032786446
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8057184428032786436
+        _destinationState:
+          rid: 8057184428032786445
+        _name: Login->Hide 2
+    - rid: 8057184428032786447
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8057184428032786457
+        _originState:
+          rid: 8057184428032786437
+        _destinationState:
+          rid: 8057184428032786434
+        _name: Notify->Open
+    - rid: 8057184428032786448
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8057184428032786461
+        _originState:
+          rid: 8057184428032786434
+        _destinationState:
+          rid: 8057184428032786440
+        _name: Open->Hide 2
+    - rid: 8057184428032786453
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8057184381380067341
+        Value: 1
+    - rid: 8057184428032786454
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8057184428032786440
+        _destinationState:
+          rid: 8057184428032786433
+        _name: Hide 2->controller
+    - rid: 8057184428032786456
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8057184381380067361
+        Value: 1
+    - rid: 8057184428032786457
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8057184381380067366
+        Value: 1
+    - rid: 8057184428032786458
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8057184381380067365
+        Value: 1
+    - rid: 8057184428032786461
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8057184428032786432
+        Value: 1
+    - rid: 8057184428032786462
+      type: {class: LuaState, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        luaStateScriptable: {fileID: 11400000, guid: bcebde9f7a8247a49bd8b299d93fb30f, type: 2}
+    - rid: 8057184428032786463
+      type: {class: LuaState, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        luaStateScriptable: {fileID: 11400000, guid: edb33623131329c4c8b7b8b00530e3e6, type: 2}
+    - rid: 8057184428032786464
+      type: {class: PopupNotication, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        PopupID: 0
+        Title: "Th\xF4ng B\xE1o"
+        Description: "B\u1EA1n c\xF3 mu\u1ED1n \u0111\u0103ng xu\u1EA5t kh\xF4ng?"
+        ShowBtnYes: 1
+        txtBtnYes: "X\xE1c nh\u1EADn"
+        btnYesHideOnClick: 1
+        ShowBtnNo: 1
+        txtBtnNo: "T\u1EEB ch\u1ED1i"
+        btnNoHideOnClick: 1
+    - rid: 8057184428032786465
+      type: {class: LuaState, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        luaStateScriptable: {fileID: 11400000, guid: 8992a2d6ede931f42b19951b8bb85b5e, type: 2}
+    - rid: 8057184428032786466
+      type: {class: LuaState, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        luaStateScriptable: {fileID: 11400000, guid: edb33623131329c4c8b7b8b00530e3e6, type: 2}
+    - rid: 8057184428032786469
+      type: {class: LuaState, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        luaStateScriptable: {fileID: 11400000, guid: edb33623131329c4c8b7b8b00530e3e6, type: 2}

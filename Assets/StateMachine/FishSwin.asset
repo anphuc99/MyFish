@@ -1,0 +1,281 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ece13e57ab2a54e80667f7d20c2544, type: 3}
+  m_Name: FishSwin
+  m_EditorClassIdentifier: 
+  StartPosition: {x: 78, y: 114}
+  AnyPosition: {x: 299, y: 273}
+  States:
+  - rid: 8968394408670789632
+  - rid: 8968394408670789633
+  - rid: 8968394408670789671
+  - rid: 8968394419092848640
+  - rid: 8968394419092848649
+  AnyTransitions:
+  - rid: 8968394419092848641
+  - rid: 8968394419092848644
+  StartingState:
+    rid: 8968394419092848649
+  Parameters:
+  - rid: 8968394408670789656
+  - rid: 8968394408670789668
+  - rid: 8968394408670789670
+  - rid: 8968394419092848642
+  - rid: 8968394419092848647
+  - rid: 8968394425008390148
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 8968394408670789632
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394408670789666
+        Position: {x: 514, y: 87}
+        _name: Swin
+        TransitionsFrom:
+        - rid: 8968394408670789635
+        TransitionsTo:
+        - rid: 8968394408670789634
+        - rid: 8968394408670789673
+        - rid: 8968394419092848644
+    - rid: 8968394408670789633
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394408670789667
+        Position: {x: 718, y: -51}
+        _name: Feed
+        TransitionsFrom:
+        - rid: 8968394408670789634
+        - rid: 8968394408670789672
+        TransitionsTo:
+        - rid: 8968394408670789635
+        - rid: 8968394408670789674
+    - rid: 8968394408670789634
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394425008390150
+        _originState:
+          rid: 8968394408670789633
+        _destinationState:
+          rid: 8968394408670789632
+        _name: Feed->Swin
+    - rid: 8968394408670789635
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394425008390149
+        _originState:
+          rid: 8968394408670789632
+        _destinationState:
+          rid: 8968394408670789633
+        _name: Swin->Feed
+    - rid: 8968394408670789656
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnAte
+        _value: 0
+    - rid: 8968394408670789666
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: Swim
+        onStateExit: StopSwin
+    - rid: 8968394408670789667
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: Feed
+        onStateExit: StopFeed
+    - rid: 8968394408670789668
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnOutOfFood
+        _value: 0
+    - rid: 8968394408670789670
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnFull
+        _value: 0
+    - rid: 8968394408670789671
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394419092848646
+        Position: {x: 986.7001, y: 100.05001}
+        _name: Ate
+        TransitionsFrom:
+        - rid: 8968394408670789673
+        - rid: 8968394408670789674
+        TransitionsTo:
+        - rid: 8968394408670789672
+    - rid: 8968394408670789672
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394408670789675
+        _originState:
+          rid: 8968394408670789633
+        _destinationState:
+          rid: 8968394408670789671
+        _name: Feed->Ate
+    - rid: 8968394408670789673
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394408670789677
+        _originState:
+          rid: 8968394408670789671
+        _destinationState:
+          rid: 8968394408670789632
+        _name: Ate->Swin
+    - rid: 8968394408670789674
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394425008390152
+        _originState:
+          rid: 8968394408670789671
+        _destinationState:
+          rid: 8968394408670789633
+        _name: Ate->Feed
+    - rid: 8968394408670789675
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394408670789656
+        Value: 1
+    - rid: 8968394408670789677
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394408670789670
+        Value: 1
+    - rid: 8968394419092848640
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394419092848645
+        Position: {x: 616, y: 369}
+        _name: ClickFish
+        TransitionsFrom: []
+        TransitionsTo:
+        - rid: 8968394419092848641
+    - rid: 8968394419092848641
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394419092848643
+        _originState:
+          rid: -2
+        _destinationState:
+          rid: 8968394419092848640
+        _name: Any->ClickFish
+    - rid: 8968394419092848642
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnClickFish
+        _value: 0
+    - rid: 8968394419092848643
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394419092848642
+        Value: 1
+    - rid: 8968394419092848644
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394419092848648
+        _originState:
+          rid: -2
+        _destinationState:
+          rid: 8968394408670789632
+        _name: Any->Swin
+    - rid: 8968394419092848645
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: ClickFeed
+        onStateExit: 
+    - rid: 8968394419092848646
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: Ate
+        onStateExit: 
+    - rid: 8968394419092848647
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnSwin
+        _value: 0
+    - rid: 8968394419092848648
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394419092848647
+        Value: 1
+    - rid: 8968394419092848649
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours: []
+        Position: {x: 180, y: 3}
+        _name: State
+        TransitionsFrom: []
+        TransitionsTo: []
+    - rid: 8968394425008390148
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 2
+        _name: OnFeed
+        _value: 0
+    - rid: 8968394425008390149
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394425008390148
+        Value: 1
+    - rid: 8968394425008390150
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394425008390148
+        Value: 0
+    - rid: 8968394425008390152
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394425008390148
+        Value: 1

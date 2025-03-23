@@ -1,0 +1,247 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ece13e57ab2a54e80667f7d20c2544, type: 3}
+  m_Name: DialogState
+  m_EditorClassIdentifier: 
+  StartPosition: {x: 200, y: 200}
+  AnyPosition: {x: 382, y: 350}
+  States:
+  - rid: 8968394447700623360
+  - rid: 8968394447700623361
+  - rid: 8968394447700623363
+  - rid: 8968394447700623365
+  - rid: 8968394447700623375
+  - rid: 8968394447700623378
+  AnyTransitions:
+  - rid: 8968394447700623374
+  - rid: 8968394447700623379
+  StartingState:
+    rid: 8968394447700623375
+  Parameters:
+  - rid: 8968394447700623367
+  - rid: 8968394447700623376
+  - rid: 8968394447700623380
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 8968394447700623360
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394447700623382
+        Position: {x: 525, y: 74}
+        _name: Controller
+        TransitionsFrom:
+        - rid: 8968394447700623362
+        TransitionsTo:
+        - rid: 8968394447700623371
+        - rid: 8968394447700623374
+    - rid: 8968394447700623361
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394447700623383
+        Position: {x: 789, y: -77}
+        _name: ShowChat
+        TransitionsFrom:
+        - rid: 8968394447700623364
+        TransitionsTo:
+        - rid: 8968394447700623362
+    - rid: 8968394447700623362
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394447700623368
+        _originState:
+          rid: 8968394447700623360
+        _destinationState:
+          rid: 8968394447700623361
+        _name: Controller->ShowChat
+    - rid: 8968394447700623363
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394447700623384
+        Position: {x: 1085, y: -10}
+        _name: ShowText
+        TransitionsFrom:
+        - rid: 8968394447700623366
+        TransitionsTo:
+        - rid: 8968394447700623364
+    - rid: 8968394447700623364
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394447700623369
+        _originState:
+          rid: 8968394447700623361
+        _destinationState:
+          rid: 8968394447700623363
+        _name: ShowChat->ShowText
+    - rid: 8968394447700623365
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours: []
+        Position: {x: 1059.3225, y: 175.89249}
+        _name: Click
+        TransitionsFrom:
+        - rid: 8968394447700623371
+        TransitionsTo:
+        - rid: 8968394447700623366
+    - rid: 8968394447700623366
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394447700623370
+        _originState:
+          rid: 8968394447700623363
+        _destinationState:
+          rid: 8968394447700623365
+        _name: ShowText->Click
+    - rid: 8968394447700623367
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: Next
+        _value: 0
+    - rid: 8968394447700623368
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394447700623367
+        Value: 1
+    - rid: 8968394447700623369
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394447700623367
+        Value: 1
+    - rid: 8968394447700623370
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394447700623367
+        Value: 1
+    - rid: 8968394447700623371
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394447700623372
+        _originState:
+          rid: 8968394447700623365
+        _destinationState:
+          rid: 8968394447700623360
+        _name: Click->Controller
+    - rid: 8968394447700623372
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394447700623367
+        Value: 1
+    - rid: 8968394447700623374
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394447700623377
+        _originState:
+          rid: -2
+        _destinationState:
+          rid: 8968394447700623360
+        _name: Any->Controller
+    - rid: 8968394447700623375
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours: []
+        Position: {x: 265, y: -23}
+        _name: State
+        TransitionsFrom: []
+        TransitionsTo: []
+    - rid: 8968394447700623376
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: Show
+        _value: 0
+    - rid: 8968394447700623377
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394447700623376
+        Value: 1
+    - rid: 8968394447700623378
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394447700623386
+        Position: {x: 780.85004, y: 377.2}
+        _name: Hide
+        TransitionsFrom: []
+        TransitionsTo:
+        - rid: 8968394447700623379
+    - rid: 8968394447700623379
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394447700623381
+        _originState:
+          rid: -2
+        _destinationState:
+          rid: 8968394447700623378
+        _name: Any->Hide
+    - rid: 8968394447700623380
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: Hide
+        _value: 0
+    - rid: 8968394447700623381
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394447700623380
+        Value: 1
+    - rid: 8968394447700623382
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: Controller
+        onStateExit: 
+    - rid: 8968394447700623383
+      type: {class: LuaState, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        luaStateScriptable: {fileID: 11400000, guid: 0ca78e49ba020c34982856e0ee9b92dd, type: 2}
+    - rid: 8968394447700623384
+      type: {class: LuaState, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        luaStateScriptable: {fileID: 11400000, guid: 197b757d435a1c04da2f86001ff31a9d, type: 2}
+    - rid: 8968394447700623386
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: Hide
+        onStateExit: 

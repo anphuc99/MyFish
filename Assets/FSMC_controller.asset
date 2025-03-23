@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ece13e57ab2a54e80667f7d20c2544, type: 3}
+  m_Name: FSMC_controller
+  m_EditorClassIdentifier: 
+  StartPosition: {x: 163, y: 173}
+  AnyPosition: {x: 88, y: 441}
+  States:
+  - rid: 8057184314962477056
+  AnyTransitions: []
+  StartingState:
+    rid: 8057184314962477056
+  Parameters:
+  - rid: 8057184373503426565
+  - rid: 8057184381380067329
+  - rid: 8057184381380067338
+  references:
+    version: 2
+    RefIds:
+    - rid: 8057184314962477056
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8057184314962477057
+        Position: {x: 275, y: 22}
+        _name: State
+        TransitionsFrom: []
+        TransitionsTo: []
+    - rid: 8057184314962477057
+      type: {class: LuaState, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        luaStateScriptable: {fileID: 11400000, guid: f091a7c95214efa4fb253fbe4bea7079, type: 2}
+    - rid: 8057184373503426565
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: btnYesOnClick
+        _value: 0
+    - rid: 8057184381380067329
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: btnNoOnClick
+        _value: 0
+    - rid: 8057184381380067338
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: ShowPopup
+        _value: 0

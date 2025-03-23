@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using MoonSharp.Interpreter;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using Kvp = System.Collections.Generic.KeyValuePair<string, object>;
 
 public static class Helper
 {
@@ -29,5 +32,31 @@ public static class Helper
         }
 
         return true;
+    }
+
+    public static Kvp PairWith(this string key, object value) => new Kvp(key, value);
+    public static T GetValue<T>(this IEnumerable<Kvp> kvp, string key)
+    {
+        foreach (Kvp kv in kvp)
+        {
+            if(kv.Key == key)
+            {
+                return (T)kv.Value;
+            }
+        }
+        return default;
+    }
+
+    public static DynValue CallFunction(this Closure closure, params object[] args)
+    {
+        try
+        {
+            return closure.Call(args);
+        }
+        catch (ScriptRuntimeException ex)
+        {
+            Debug.LogError("Lua runtime error: " + ex.DecoratedMessage + "\n" + ex.StackTrace);
+            throw ex;
+        }
     }
 }

@@ -1,0 +1,222 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ece13e57ab2a54e80667f7d20c2544, type: 3}
+  m_Name: FishStatus
+  m_EditorClassIdentifier: 
+  StartPosition: {x: 200, y: 200}
+  AnyPosition: {x: 416, y: 406}
+  States:
+  - rid: 8968394408670789636
+  - rid: 8968394408670789646
+  - rid: 8968394408670789649
+  - rid: 8968394408670789652
+  AnyTransitions:
+  - rid: 8968394442578067460
+  StartingState:
+    rid: 8968394408670789636
+  Parameters:
+  - rid: 8968394408670789663
+  - rid: 8968394408670789662
+  - rid: 8968394408670789665
+  - rid: 8968394442578067456
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 8968394408670789636
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394442578067463
+        Position: {x: 518, y: 75}
+        _name: Normal
+        TransitionsFrom:
+        - rid: 8968394408670789653
+        - rid: 8968394425008390160
+        TransitionsTo:
+        - rid: 8968394425008390159
+        - rid: 8968394425008390161
+        - rid: 8968394442578067461
+    - rid: 8968394408670789646
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394442578067465
+        Position: {x: 847, y: 75}
+        _name: Hungry
+        TransitionsFrom:
+        - rid: 8968394425008390161
+        TransitionsTo:
+        - rid: 8968394425008390160
+    - rid: 8968394408670789649
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394442578067466
+        Position: {x: 722, y: 271}
+        _name: Adult
+        TransitionsFrom:
+        - rid: 8968394442578067461
+        TransitionsTo:
+        - rid: 8968394442578067460
+    - rid: 8968394408670789652
+      type: {class: FSMC_State, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _behaviours:
+        - rid: 8968394442578067464
+        Position: {x: 745, y: -80}
+        _name: Thinking
+        TransitionsFrom:
+        - rid: 8968394425008390159
+        TransitionsTo:
+        - rid: 8968394408670789653
+    - rid: 8968394408670789653
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394442578067459
+        _originState:
+          rid: 8968394408670789636
+        _destinationState:
+          rid: 8968394408670789652
+        _name: Normal->Thinking
+    - rid: 8968394408670789662
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnThinking
+        _value: 0
+    - rid: 8968394408670789663
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnNormal
+        _value: 0
+    - rid: 8968394408670789665
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 3
+        _name: OnAdult
+        _value: 0
+    - rid: 8968394425008390159
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394408670789652
+        _destinationState:
+          rid: 8968394408670789636
+        _name: Thinking->Normal
+    - rid: 8968394425008390160
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394442578067457
+        _originState:
+          rid: 8968394408670789636
+        _destinationState:
+          rid: 8968394408670789646
+        _name: Normal->Hungry
+    - rid: 8968394425008390161
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394442578067458
+        _originState:
+          rid: 8968394408670789646
+        _destinationState:
+          rid: 8968394408670789636
+        _name: Hungry->Normal
+    - rid: 8968394442578067456
+      type: {class: FSMC_BoolParameter, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        _type: 2
+        _name: OnHungry
+        _value: 0
+    - rid: 8968394442578067457
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394442578067456
+        Value: 1
+    - rid: 8968394442578067458
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394442578067456
+        Value: 0
+    - rid: 8968394442578067459
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394408670789662
+        Value: 1
+    - rid: 8968394442578067460
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions:
+          - rid: 8968394442578067462
+        _originState:
+          rid: -2
+        _destinationState:
+          rid: 8968394408670789649
+        _name: Any->Adult
+    - rid: 8968394442578067461
+      type: {class: FSMC_Transition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        conditions:
+        - conditions: []
+        _originState:
+          rid: 8968394408670789649
+        _destinationState:
+          rid: 8968394408670789636
+        _name: Adult->Normal
+    - rid: 8968394442578067462
+      type: {class: FSMC_BoolCondition, ns: FSMC.Runtime, asm: FSMC.Runtime}
+      data:
+        comparison: 0
+        parameter:
+          rid: 8968394408670789665
+        Value: 1
+    - rid: 8968394442578067463
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: Normal
+        onStateExit: 
+    - rid: 8968394442578067464
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: RandomThinking
+        onStateExit: 
+    - rid: 8968394442578067465
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: Hungry
+        onStateExit: Full
+    - rid: 8968394442578067466
+      type: {class: LuaStateController, ns: , asm: Assembly-CSharp}
+      data:
+        enabled: 1
+        onStateEnter: Adult
+        onStateExit: 

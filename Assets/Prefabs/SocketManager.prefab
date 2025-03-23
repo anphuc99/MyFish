@@ -1,0 +1,238 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6484724001076871290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 997521934665383529}
+  - component: {fileID: 7726078977434904108}
+  - component: {fileID: 1161429727522179715}
+  m_Layer: 0
+  m_Name: SocketManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &997521934665383529
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6484724001076871290}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1213.2703, y: 708.4506, z: 6.865459}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7726078977434904108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6484724001076871290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28b1cc6ae8e3bd6439414fe839ad7f9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  execute: {fileID: 1161429727522179715}
+--- !u!114 &1161429727522179715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6484724001076871290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94669698500970d43bec5de852ab77d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _controller: {fileID: 11400000, guid: df1cef4c41c1f9c498163deda297a264, type: 2}
+  actions:
+  - name: OnConnect
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: OnConnect
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: DelayConnected
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: DelayConnected
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: ConnectedFail
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: ConnectedFail
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: ConnectedSuccess
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: ConnectedSuccess
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: Refresh
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: Refresh
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: BtnYesClick
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: BtnYesClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: OnSendHTTP
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: OnSendHTTP
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: DelayHTTPRequest
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: DelayHTTPRequest
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: HTTPSuccess
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: HTTPSuccess
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: HTTPError
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: HTTPError
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: HTTPFail
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7726078977434904108}
+          m_TargetAssemblyTypeName: SocketManager, Assembly-CSharp
+          m_MethodName: HTTPFail
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
